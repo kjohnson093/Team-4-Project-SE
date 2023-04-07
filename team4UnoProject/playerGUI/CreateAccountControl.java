@@ -8,16 +8,16 @@ import java.io.IOException;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import playerClient.playerClient;
+import playerClient.PlayerClient;
 
 public class CreateAccountControl implements ActionListener
 {
   // Private data fields for the container and chat client.
   private JPanel container;
-  private playerClient client;
+  private PlayerClient client;
   
   // Constructor for the create account controller.
-  public CreateAccountControl(JPanel container, playerClient client)
+  public CreateAccountControl(JPanel container, PlayerClient client)
   {
     this.container = container;
     this.client = client;

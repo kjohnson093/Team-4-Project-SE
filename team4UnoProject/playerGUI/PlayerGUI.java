@@ -2,7 +2,7 @@ package playerGUI;
 
 import javax.swing.*;
 
-import playerClient.playerClient;
+import playerClient.PlayerClient;
 
 import java.awt.*;
 import java.io.IOException;
@@ -15,7 +15,7 @@ public class PlayerGUI extends JFrame
   public PlayerGUI()
   {
     // Set up the chat client.
-	playerClient client = new playerClient();
+	  PlayerClient client = new PlayerClient();
     client.setHost("localhost");
     client.setPort(8300);
     try

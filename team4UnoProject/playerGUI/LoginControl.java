@@ -3,7 +3,7 @@ package playerGUI;
 import java.awt.*;
 import javax.swing.*;
 
-import playerClient.playerClient;
+import playerClient.PlayerClient;
 
 import java.awt.event.*;
 import java.io.IOException;
@@ -12,10 +12,10 @@ public class LoginControl implements ActionListener
 {
   // Private data fields for the container and chat client.
   private JPanel container;
-  private playerClient client;
+  private PlayerClient client;
   
   // Constructor for the login controller.
-  public LoginControl(JPanel container, playerClient client)
+  public LoginControl(JPanel container, PlayerClient client)
   {
     this.container = container;
     this.client = client;
