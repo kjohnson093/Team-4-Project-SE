@@ -7,114 +7,124 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-public class ServerGUI extends JFrame {
+public class ServerGUI extends JFrame
+{
+	// Data fields.
+	private JLabel status;
+	private String[] labels = {"Port #", "Timeout"};
+	private JTextField[] textFields = new JTextField[labels.length];
+	private JTextArea log;
+	private JButton listen;
+	private JButton close;
+	private JButton stop;
+	private JButton quit;
+	private GameServer server;
 
-
-	private JButton start ;
-	private JButton close; 
-	private JButton stop; 
-	private JButton quit; 
-	private JLabel serverLogLabel;
-	private JLabel portLabel; 
-	private JTextField portField; 
-	private JLabel timeoutLabel;
-	private JTextField timeoutField;
-	private JTextArea serverLogTextArea; 
-	private GameServer server; 
-	//Constructor - Creates view and interactive components for controlling the server
-	public ServerGUI() {
-		setTitle("ServerGUI");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(400,450);
-
-		//Create panels, labels, and buttons
-		//Server Status Condition Label
-		JLabel statusConditionLabel = new JLabel("Not Connected",JLabel.CENTER);
-		statusConditionLabel.setForeground(Color.RED);
-
-		/////North Panel//////
+	// Constructor for the server GUI.
+	public ServerGUI()
+	{	
+		// Create the main variables that will be used.
 		JPanel north = new JPanel();
-		north.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		JLabel status = new JLabel("Status: ", JLabel.CENTER);
-		north.add(status);
-		north.add(statusConditionLabel);
-
-		/////South Panel/////
+		JPanel center = new JPanel(new BorderLayout());
 		JPanel south = new JPanel();
+		EventHandler handler = new EventHandler();
+		int i = 0;
 
-		//Server control buttons
-		start = new JButton("Start");
+		// Set the title and default close operation.
+		this.setTitle("Chat Server");
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		// Create the status label.
+		JLabel statusText = new JLabel("Status:");
+		north.add(statusText);
+		status = new JLabel("Not Connected");
+		status.setForeground(Color.RED);
+		north.add(status);
+
+		// Create the grid of text fields.
+		JPanel centerNorth = new JPanel(new GridLayout(labels.length, 2, 5, 5));
+		for (i = 0; i < textFields.length; i++)
+		{
+			JLabel label = new JLabel(labels[i], JLabel.RIGHT);
+			centerNorth.add(label);
+			textFields[i] = new JTextField(10);
+			centerNorth.add(textFields[i]);
+		}
+
+		// Set some default values for the server.
+		textFields[0].setText("8300");
+		textFields[1].setText("500");
+
+		// Buffer the grid of text fields and add it to the north part of the center.
+		JPanel centerNorthBuffer = new JPanel();
+		centerNorthBuffer.add(centerNorth);
+		center.add(centerNorthBuffer, BorderLayout.NORTH);
+
+		// Create the server log panel.
+		JPanel serverLogPanel = new JPanel(new BorderLayout());
+		JLabel serverLabel = new JLabel("Server Log", JLabel.CENTER);
+		JPanel serverLabelBuffer = new JPanel();
+		serverLabelBuffer.add(serverLabel);
+		serverLogPanel.add(serverLabelBuffer, BorderLayout.NORTH);
+		log = new JTextArea(10, 35);
+		log.setEditable(false);
+		JScrollPane serverLogPane = new JScrollPane(log);
+		JPanel serverLogPaneBuffer = new JPanel();
+		serverLogPaneBuffer.add(serverLogPane);
+		serverLogPanel.add(serverLogPaneBuffer, BorderLayout.SOUTH);
+
+		// Add the server log panel to the south part of the center.
+		JPanel centerSouth = new JPanel();
+		centerSouth.add(serverLogPanel);
+		center.add(centerSouth, BorderLayout.SOUTH);
+
+		// Create the buttons.
+		listen = new JButton("Listen");
+		listen.addActionListener(handler);
+		south.add(listen);
 		close = new JButton("Close");
-		stop = new JButton("Stop");
-		quit = new JButton("Quit");
-		south.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		south.add(start);
+		close.addActionListener(handler);
 		south.add(close);
+		stop = new JButton("Stop");
+		stop.addActionListener(handler);
 		south.add(stop);
+		quit = new JButton("Quit");
+		quit.addActionListener(handler);
 		south.add(quit);
 
-		/////Center Panel/////
-		JPanel center = new JPanel();
-		getContentPane().add(center, BorderLayout.CENTER);
-		center.setLayout(null);
+		// Add the north, center, and south JPanels to the JFrame.
+		this.add(north, BorderLayout.NORTH);
+		this.add(center, BorderLayout.CENTER);
+		this.add(south, BorderLayout.SOUTH);
 
-		//Server Log
-		serverLogLabel = new JLabel("Server Log Below");
-		serverLogLabel.setBounds(139, 91, 106, 22);
-		center.add(serverLogLabel);
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(0, 124, 386, 232);
-		center.add(scrollPane);
-		serverLogTextArea = new JTextArea();
-		scrollPane.setViewportView(serverLogTextArea);
-		serverLogTextArea.setLineWrap(true);
-		serverLogTextArea.setEditable(false);
+		// Display the window.
+		this.setSize(450, 450);
+		this.setVisible(true);
 
-		//Port components
-		portLabel = new JLabel("Port #");
-		portLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		portLabel.setBounds(86, 11, 75, 17);
-		center.add(portLabel);
-		portField = new JTextField("8300");
-		portField.setBounds(171, 8, 96, 20);
-		center.add(portField);
-		portField.setColumns(10);
-
-		//Timeout components
-		timeoutLabel = new JLabel("Timeout");
-		timeoutLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		timeoutLabel.setBounds(86, 42, 74, 17);
-		center.add(timeoutLabel);
-		timeoutField = new JTextField("500");
-		timeoutField.setBounds(171, 39, 96, 20);
-		center.add(timeoutField);
-		timeoutField.setColumns(10);
-
-		//Add Panels to Frame
-		getContentPane().add(north, BorderLayout.NORTH);
-		getContentPane().add(south, BorderLayout.SOUTH);
-		north.setVisible(true);
-		south.setVisible(true);
-		//Set frame visible
-		setVisible(true);
-
-		//Event handling
-		EventHandler event = new EventHandler();
-		start.addActionListener(event);
-		close.addActionListener(event);
-		stop.addActionListener(event);
-		quit.addActionListener(event);
-
-		/////Create Server Object/////
-		server = new GameServer();
-		//Set server log and status to GUI
-		server.setStatus(statusConditionLabel);
-		server.setLog(serverLogTextArea);
-
+		// Set up the chat server object.
+		server = new ChatServer();
+		server.setLog(log);
+		server.setStatus(status);
 	}
 
-	public static void main(String[] args) {
+	// Main function that creates a server GUI when the program is started.
+	public static void main(String[] args)
+	{
 		new ServerGUI();
+	}
+
+	// Getters for the important components.
+	public JTextField getTextFieldAt(int index)
+	{
+		return textFields[index];
+	}
+	public JLabel getStatus()
+	{
+		return status;
+	}
+	public JTextArea getLog()
+	{
+		return log;
 	}
 
 	// Class for handling events.
@@ -127,29 +137,26 @@ public class ServerGUI extends JFrame {
 			Object buttonClicked = e.getSource();
 
 			// Handle the Listen button.
-			if (buttonClicked == start)
+			if (buttonClicked == listen)
 			{
 				// Display an error if the port number or timeout was not entered.
-				if (portField.getText().equals("") || timeoutField.getText().equals(""))
+				if (textFields[0].getText().equals("") || textFields[1].getText().equals(""))
 				{
-					serverLogTextArea.append("Port number or timeout not entered before pressing Listen\n");
+					log.append("Port number or timeout not entered before pressing Listen\n");
 				}
 
 				// Otherwise, tell the server to start listening with the user's settings.
 				else
 				{
-					int port = Integer.parseInt(portField.getText());
-					int timeout = Integer.parseInt(timeoutField.getText());
-					server.setPort(port);
-					server.setTimeout(timeout);
+					server.setPort(Integer.parseInt(textFields[0].getText()));
+					server.setTimeout(Integer.parseInt(textFields[1].getText()));
 					try
 					{
 						server.listen();
-						
 					}
 					catch (IOException e1)
 					{
-						serverLogTextArea.append("An exception occurred: " + e1.getMessage() + "\n");
+						log.append("An exception occurred: " + e1.getMessage() + "\n");
 					}
 				}
 			}
@@ -160,7 +167,7 @@ public class ServerGUI extends JFrame {
 				// Display an error if the server has not been started.
 				if (!server.isRunning())
 				{
-					serverLogTextArea.append("Server not currently started\n");
+					log.append("Server not currently started\n");
 				}
 
 				// Otherwise, close the server.
@@ -172,7 +179,7 @@ public class ServerGUI extends JFrame {
 					}
 					catch (IOException e1)
 					{
-						serverLogTextArea.append("An exception occurred: " + e1.getMessage() + "\n");
+						log.append("An exception occurred: " + e1.getMessage() + "\n");
 					}
 				}
 			}
@@ -183,7 +190,7 @@ public class ServerGUI extends JFrame {
 				// Display an error if the server is not listening.
 				if (!server.isListening())
 				{
-					serverLogTextArea.append("Server not currently listening\n");
+					log.append("Server not currently listening\n");
 				}
 
 				// Otherwise, stop listening.
