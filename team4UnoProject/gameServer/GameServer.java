@@ -26,7 +26,7 @@ public class GameServer extends AbstractServer {
 	private JLabel status; 
 	private boolean running = false;
 	//private ArrayList<Game> activeGames;
-	private UserDatabase database;
+	private UserDatabase database = new UserDatabase();
 
 	public GameServer() {
 		super(12345); //dummy port to be overridden by input
