@@ -43,17 +43,17 @@ public class PlayerGUI extends JFrame
     InitialControl ic = new InitialControl(container,client);
     LoginControl lc = new LoginControl(container,client);
     CreateAccountControl cac = new CreateAccountControl(container,client);
-    InitialMenuControl mc = new InitialMenuControl(container, client);
+    InitialMenuControl imc = new InitialMenuControl(container, client);
     //Set the client info
     client.setLoginControl(lc);
     client.setCreateAccountControl(cac);
-    client.setInitialMenuControl(mc);
+    client.setInitialMenuControl(imc);
     
     // Create the four views. (need the controller to register with the Panels
     JPanel view1 = new InitialPanel(ic);
     JPanel view2 = new LoginPanel(lc);
     JPanel view3 = new CreateAccountPanel(cac);
-    JPanel view4 = new InitialMenuPanel(mc);
+    JPanel view4 = new InitialMenuPanel(imc);
     
     // Add the views to the card layout container.
     container.add(view1, "1");

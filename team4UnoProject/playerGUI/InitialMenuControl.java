@@ -3,7 +3,7 @@ package playerGUI;
 import java.awt.*;
 import javax.swing.*;
 
-import playerClient.playerClient;
+import playerClient.PlayerClient;
 
 import java.awt.event.*;
 
@@ -11,15 +11,16 @@ public class InitialMenuControl implements ActionListener
 {
   // Private data field for storing the container.
   private JPanel container;
-  private playerClient client;
+  private PlayerClient client;
   // Constructor for the initial controller.
-  public InitialMenuControl(JPanel container, playerClient client)
+  public InitialMenuControl(JPanel container, PlayerClient client)
   {
     this.container = container;
     this.client = client;
   }
-  
-  // Handle button clicks.
+ 
+
+// Handle button clicks.
   public void actionPerformed(ActionEvent ae)
   {
     // Get the name of the button clicked.

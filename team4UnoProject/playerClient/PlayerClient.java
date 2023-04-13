@@ -11,10 +11,10 @@ public class PlayerClient extends AbstractClient
 
 	private  LoginControl loginControl;
 	private CreateAccountControl createAccountControl;	
-
 	private  InitialControl  initialControl;
 	private LoginData loginData;
 	private NewGameData New;
+	private InitialMenuControl intialMenuControl;
 
 	public PlayerClient()
 	{
@@ -92,6 +92,11 @@ public class PlayerClient extends AbstractClient
 
 	public void setLoginData(LoginData loginData) {
 		this.loginData = loginData;
+
+	}
+
+	public void setInitialMenuControl(InitialMenuControl imc) {
+		intialMenuControl = imc;
 
 	}
 }
