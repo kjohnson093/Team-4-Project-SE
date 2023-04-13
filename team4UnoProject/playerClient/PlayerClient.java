@@ -1,26 +1,28 @@
-/*
 
 package playerClient;
 
 import ocsf.client.AbstractClient;
+import gameManagement.*;
+import playerGUI.*;
+import gameServer.*;
 
 public class PlayerClient extends AbstractClient 
 {
 
 	private  LoginControl loginControl;
 	private CreateAccountControl createAccountControl;	
-	
+
 	private  InitialControl  initialControl;
 	private LoginData loginData;
 	private NewGameData New;
-	
-	public ChatClient()
+
+	public PlayerClient()
 	{
 		super("local host", 8300);
 	}
-	
-		
- @Override
+
+
+	@Override
 	protected void handleMessageFromServer(Object msg)
 	{
 		if(msg instanceof LoginData) {
@@ -30,20 +32,20 @@ public class PlayerClient extends AbstractClient
 			}
 			else {
 				System.out.println("Login Successfully!");
-				lc.loginSuccess();
+				//ld.loginSuccess();
 			}
 		}
 		else if(msg instanceof CreateAccountData)
 		{
 			CreateAccountData cad = (CreateAccountData)msg;
-		if(cad.getUsername().equals("")) {
-			System.out.println("Fail to create new account!");
-			cac.displayError("Username already exist!");
-		}
-		else {
-			System.out.println("Account created successfully!");
-			cac.createSuccess();
-		}
+			if(cad.getUsername().equals("")) {
+				System.out.println("Fail to create new account!");
+				//cac.displayError("Username already exist!");
+			}
+			else {
+				System.out.println("Account created successfully!");
+				//cac.createSuccess();
+			}
 		}
 		else if(msg instanceof String) {
 			System.out.println("Server Message sent to Client\n" + msg);
@@ -59,43 +61,40 @@ public class PlayerClient extends AbstractClient
 	public void connectionEstablished() {
 		System.out.println("Client Connected");
 	}
-}
-	
 
-public CreateAccountControl getCreateAccountControl() {
-	  return createAccountControl;
-	  }
 
-	
-public InitialControl getInitialControl() {
-		    return InitialControl;
-		  }
-public void setInitialControl(InitialControl initialControl) {
-		    InitialControl = initialControl;
-}
-	
-public LoginControl getLoginControl() {
-		    return loginControl;
-		  }
-public void setLoginControl(LoginControl loginControl) {
-    this.loginControl = loginControl;
-  }
 
-public CreateAccountControl getCreateAccountControl() {
-    return createAccountControl;
-  }
-  public void setCreateAccountControl(CreateAccountControl createAccountControl) {
-    this.createAccountControl = createAccountControl;
-  }
+	public CreateAccountControl getCreateAccountControl() {
+		return createAccountControl;
+	}
 
-public LoginData getLoginData() {
-    return loginData;
-}
 
-public void setLoginData(LoginData loginData) {
-    this.loginData = loginData;
+	public InitialControl getInitialControl() {
+		return initialControl;
+	}
+	public void setInitialControl(InitialControl initialControl) {
+		this.initialControl = initialControl;
+	}
 
+	public LoginControl getLoginControl() {
+		return loginControl;
+	}
+	public void setLoginControl(LoginControl loginControl) {
+		this.loginControl = loginControl;
+	}
+	public void setCreateAccountControl(CreateAccountControl createAccountControl) {
+		this.createAccountControl = createAccountControl;
+	}
+
+	public LoginData getLoginData() {
+		return loginData;
+	}
+
+	public void setLoginData(LoginData loginData) {
+		this.loginData = loginData;
+
+	}
 }
 
-*/
+
 
