@@ -1,18 +1,17 @@
 package playerClient;
 
-//import ocsf.client.AbstractClient;
+import ocsf.client.AbstractClient;
 
 public class PlayerClient extends AbstractClient 
 {
 
-//private CreateAccountControl createAccountControl;	
-//private  InitialControl  initialControl;
-//private  LoginControl loginControl;
+private CreateAccountControl createAccountControl;	
+private  InitialControl  initialControl;
+private  LoginControl loginControl;
 	
-//private LoginData loginData;
-//private NewGameData new
-	
-/*	
+private LoginData loginData;
+private NewGameData new
+		
  //Constructor
 public PlayerClient() {
 	super("localhost",8300);
@@ -37,6 +36,6 @@ public LoginControl getLoginControl() {
 		  public void setLoginControl(LoginControl loginControl) {
 		    this.loginControl = loginControl;
 		  }
-	*/
+
 
 }
