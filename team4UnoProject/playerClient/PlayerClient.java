@@ -75,9 +75,25 @@ public void setInitialControl(InitialControl initialControl) {
 public LoginControl getLoginControl() {
 		    return loginControl;
 		  }
-		  public void setLoginControl(LoginControl loginControl) {
-		    this.loginControl = loginControl;
-		  }
+public void setLoginControl(LoginControl loginControl) {
+    this.loginControl = loginControl;
+  }
 
+public CreateAccountControl getCreateAccountControl() {
+    return createAccountControl;
+  }
+  public void setCreateAccountControl(CreateAccountControl createAccountControl) {
+    this.createAccountControl = createAccountControl;
+  }
+
+public LoginData getLoginData() {
+    return loginData;
+}
+
+public void setLoginData(LoginData loginData) {
+    this.loginData = loginData;
 
 }
+
+
+
