@@ -5,12 +5,12 @@ import ocsf.client.AbstractClient;
 public class PlayerClient extends AbstractClient 
 {
 
-	private CreateAccountControl createAccountControl;	
-	private  InitialControl  initialControl;
 	private  LoginControl loginControl;
+	private CreateAccountControl createAccountControl;	
 	
+	private  InitialControl  initialControl;
 	private LoginData loginData;
-	private NewGameData;
+	private NewGameData New;
 	
 	public ChatClient()
 	{
