@@ -1,3 +1,5 @@
+/*
+
 package playerClient;
 
 import ocsf.client.AbstractClient;
@@ -95,5 +97,5 @@ public void setLoginData(LoginData loginData) {
 
 }
 
-
+*/
 
