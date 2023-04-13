@@ -57,18 +57,18 @@ public class UserDatabaseTest {
 	public void testAddScoreNewUser() throws SQLException {
 		// Add a score for a new user.
 		try {
-			userDatabase.createNewAccount("howdy", "partner");
+			userDatabase.createNewAccount("newUser", "password123");
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		userDatabase.addScore("howdy");
+		userDatabase.addScore("newUser");
 		
 		// Check that the user's score is 1.
 		HashMap<String, Integer> scoreboardData = userDatabase.displayScorebaord();
-		assertEquals(Integer.valueOf(1), scoreboardData.get("howdy"));
+		assertEquals(Integer.valueOf(1), scoreboardData.get("newUser"));
 		try {
-			deleteTestUser("howdy");
+			deleteTestUser("newUser");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -80,22 +80,22 @@ public class UserDatabaseTest {
 		// Add a score for an existing user.
 		
 		try {
-			userDatabase.createNewAccount("macaroni", "andcheese");
+			userDatabase.createNewAccount("user1", "password");
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		userDatabase.addScore("macaroni");
+		userDatabase.addScore("user1");
 		
 		// Add another score for the same user.
-		userDatabase.addScore("macaroni");
+		userDatabase.addScore("user1");
 		
 		// Check that the user's score is 2.
 		HashMap<String, Integer> scoreboardData = userDatabase.displayScorebaord();
-		assertEquals(Integer.valueOf(2), scoreboardData.get("macaroni"));
+		assertEquals(Integer.valueOf(2), scoreboardData.get("user1"));
 		
 		try {
-			deleteTestUser("macaroni");
+			deleteTestUser("user1");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -105,24 +105,24 @@ public class UserDatabaseTest {
 	@Test
 	public void testDisplayScoreboard() throws SQLException {
 		try {
-			userDatabase.createNewAccount("rick", "testpassword");
-			userDatabase.createNewAccount("morty", "test2password");
+			userDatabase.createNewAccount("testUser1", "testpassword");
+			userDatabase.createNewAccount("testUser2", "test2password");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		// Add scores for two users.
-		userDatabase.addScore("rick");
-		userDatabase.addScore("morty");
+		userDatabase.addScore("testUser1");
+		userDatabase.addScore("testUser2");
 		
 		// Check that the scoreboard data is correct.
 		HashMap<String, Integer> scoreboardData = userDatabase.displayScorebaord();
-		assertEquals(Integer.valueOf(1), scoreboardData.get("rick"));
-		assertEquals(Integer.valueOf(1), scoreboardData.get("morty"));
+		assertEquals(Integer.valueOf(1), scoreboardData.get("testUser1"));
+		assertEquals(Integer.valueOf(1), scoreboardData.get("testUser2"));
 		
 		try {
-			deleteTestUser("rick");
-			deleteTestUser("morty");
+			deleteTestUser("testUser1");
+			deleteTestUser("testUser2");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
