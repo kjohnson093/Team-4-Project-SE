@@ -20,30 +20,43 @@ public class PlayerClient extends AbstractClient {
 
     @Override
     protected void handleMessageFromServer(Object msg) {
-        if (msg instanceof LoginData) {
-            LoginData ld = (LoginData) msg;
-            if (ld.getUsername().equals("")) {
-                System.out.println("Fail to login!");
-            } else {
-                System.out.println("Login Successfully!");
-                // ld.loginSuccess();
-            }
-        } else if (msg instanceof CreateAccountData) {
-            CreateAccountData cad = (CreateAccountData) msg;
-            if (cad.getUsername().equals("")) {
-                System.out.println("Fail to create new account!");
-                // cac.displayError("Username already exist!");
-            } else {
-                System.out.println("Account created successfully!");
-                // cac.createSuccess();
-            }
-        } else if (msg instanceof String) {
-            System.out.println("Server Message sent to Client\n" + msg);
-        } else if (msg instanceof GameData) {
-            if (gameControl != null) {
-                gameControl.handleGameData((GameData) msg);
-            }
-        }
+       // If we received a String, figure out what this event is.
+	    if (msg instanceof String)
+	    {
+	      // Get the text of the message.
+	      String message = (String)msg;
+	      
+	      // If we successfully logged in, tell the login controller.
+	      if (message.equals("LoginSuccessful"))
+	      {
+	        loginControl.loginSuccess();
+	      }
+	      
+	      // If we successfully created an account, tell the create account controller.
+	      else if (message.equals("CreateAccountSuccessful"))
+	      {
+	        createAccountControl.createAccountSuccess();
+	      }
+	    }
+	    
+	    // If we received an Error, figure out where to display it.
+	    else if (msg instanceof Error)
+	    {
+	      // Get the Error object.
+	      Error error = (Error)msg;
+	      
+	      // Display login errors using the login controller.
+	      if (error.getType().equals("Login"))
+	      {
+	        loginControl.displayError(error.getMessage());
+	      }
+	      
+	      // Display account creation errors using the create account controller.
+	      else if (error.getType().equals("CreateAccount"))
+	      {
+	        createAccountControl.displayError(error.getMessage());
+	      }
+	    }
     }
 
     public void connectionException(Throwable exception) {
