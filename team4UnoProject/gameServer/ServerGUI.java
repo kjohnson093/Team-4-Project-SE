@@ -1,6 +1,7 @@
 package gameServer;
 
 import javax.swing.*;
+
 import java.awt.*;
 //import java.io.IOException;
 import java.awt.event.ActionEvent;
@@ -19,6 +20,7 @@ public class ServerGUI extends JFrame
 	private JButton stop;
 	private JButton quit;
 	private GameServer server;
+	private GameManagement manageGame;
 
 	// Constructor for the server GUI.
 	public ServerGUI()
@@ -105,6 +107,8 @@ public class ServerGUI extends JFrame
 		server = new GameServer();
 		server.setLog(log);
 		server.setStatus(status);
+		manageGame = new GameManagement(server);
+		server.setGameManagement(manageGame);
 	}
 
 	// Main function that creates a server GUI when the program is started.
@@ -150,6 +154,8 @@ public class ServerGUI extends JFrame
 				{
 					server.setPort(Integer.parseInt(textFields[0].getText()));
 					server.setTimeout(Integer.parseInt(textFields[1].getText()));
+					
+					System.out.println( server.getNumberOfClients());
 					try
 					{
 						server.listen();
