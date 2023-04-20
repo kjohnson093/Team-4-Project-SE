@@ -54,6 +54,7 @@ public class LoginControl implements ActionListener
       // Submit the login information to the server.
       try
       {
+        client.openConnection();
         client.sendToServer(data);
       }
       catch (IOException e)
