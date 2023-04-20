@@ -35,3 +35,4 @@ public class LoginData implements Serializable
     setPassword(password);
   }
 }
+
