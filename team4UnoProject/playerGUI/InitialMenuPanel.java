@@ -10,7 +10,7 @@ public class InitialMenuPanel extends JPanel {
 		setBackground(Color.RED);
 		
 		// Create the image label.
-		ImageIcon image = new ImageIcon("Uno.png"); 
+		ImageIcon image = new ImageIcon("images/Uno.png"); 
 		JLabel imageLabel = new JLabel(image);
 		
 		int desiredWidth = 200; // Specify the desired width
