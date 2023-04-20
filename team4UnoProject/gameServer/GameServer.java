@@ -1,5 +1,4 @@
-/*
- * Keondre Johnson
+* Keondre Johnson
  * 
  * This program runs a server for handling clients connecting to each other in an UNO! game.
  * The server will also maintain the database.
@@ -11,16 +10,18 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.*;
 
-import javax.swing.JLabel;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
-import database.*;
-import gameManagement.*;
-import playerGUI.*;
-import playerClient.*;
+import playerGUI.LoginData;
+import playerGUI.CreateAccountData;
+import playerGUI.NewGameData;
+import playerGUI.JoinGameData;
+import playerGUI.TopCard;
+import database.UserDatabase;
 
 public class GameServer extends AbstractServer {
 
+	GameManagement manageGame;
 	//Corresponding text area and label with ServerGUI
 	private JTextArea log; 
 	private JLabel status; 
@@ -29,8 +30,15 @@ public class GameServer extends AbstractServer {
 	private UserDatabase database = new UserDatabase();
 
 	public GameServer() {
-		super(12345); //dummy port to be overridden by input
-		setTimeout(500);
+		super(8300);
+		this.setPort(8300);
+		try {
+			this.listen();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// TODO Auto-generated constructor stub
 	}
 
 	//Set ServerGUI log and status
@@ -85,118 +93,123 @@ public class GameServer extends AbstractServer {
 
 	//Update GUI when client connects
 	public void clientConnected(ConnectionToClient client) {
+		log.append("Client " + client.getId() + " connected\n");
+		manageGame.numberOfPlayers++;
+		
 		try {
-			client.sendToClient("username: client-" + client.getId());
-			log.append("Client " + client.getId() + " Connected" + "\n");
+			client.sendToClient(manageGame.topCard);
+			client.sendToClient(manageGame.deal7());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+	public void setGameManagement(GameManagement manageGame) {
+		this.manageGame = manageGame;
+	}
+
+	@Override
 	public void handleMessageFromClient(Object arg0, ConnectionToClient arg1) 
 	{
 		// Check what kind of object arg0 is (sent from client), and serve it accordingly
 
-				// Handle login information
-				if (arg0 instanceof LoginData)
+		// Handle login information
+		if (arg0 instanceof LoginData)
+		{
+			// Check the username and password with the database.
+			LoginData data = (LoginData)arg0;
+			Object result = "LoginFailed";
+			try {
+				if (database.verifyAccount(data.getUsername(), data.getPassword()))
 				{
-					// Check the username and password with the database.
-					LoginData data = (LoginData)arg0;
-					Object result = "LoginFailed";
-					try {
-						if (database.verifyAccount(data.getUsername(), data.getPassword()))
-						{
-							result = "LoginSuccessful";
-							log.append("Client " + arg1.getId() + " successfully logged in as " + data.getUsername() + "\n");
-						}
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						log.append("Client " + arg1.getId() + " failed to log in\n");
-						e1.printStackTrace();
-					}
-		
-					// Send the result to the client.
-					try
-					{
-						arg1.sendToClient(result);
-					}
-					catch (IOException e)
-					{
-						return;
-					}
+					result = "LoginSuccessful";
+					log.append("Client " + arg1.getId() + " successfully logged in as " + data.getUsername() + "\n");
 				}
-		
-				// Handle create account
-				else if (arg0 instanceof CreateAccountData)
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				log.append("Client " + arg1.getId() + " failed to log in\n");
+				e1.printStackTrace();
+			}
+
+			// Send the result to the client.
+			try
+			{
+				arg1.sendToClient(result);
+			}
+			catch (IOException e)
+			{
+				return;
+			}
+		}
+
+		// Handle create account
+		else if (arg0 instanceof CreateAccountData)
+		{
+			// Try to create the account.
+			CreateAccountData data = (CreateAccountData)arg0;
+			Object result = "CreateAccountFailed";
+			try {
+				if (database.createNewAccount(data.getUsername(), data.getPassword()))
 				{
-					// Try to create the account.
-					CreateAccountData data = (CreateAccountData)arg0;
-					Object result = "CreateAccountFailed";
-					try {
-						if (database.createNewAccount(data.getUsername(), data.getPassword()))
-						{
-							result = "CreateAccountSuccessful";
-							log.append("Client " + arg1.getId() + " created a new account called " + data.getUsername() + "\n");
-						}
-					} catch (Exception e1) {
-						log.append("Client " + arg1.getId() + " failed to create a new account\n");
-						e1.printStackTrace();
-					}
-		
-					// Send the result to the client.
-					try
-					{
-						arg1.sendToClient(result);
-					}
-					catch (IOException e)
-					{
-						return;
-					}
-		
+					result = "CreateAccountSuccessful";
+					log.append("Client " + arg1.getId() + " created a new account called " + data.getUsername() + "\n");
 				}
+			} catch (Exception e1) {
+				log.append("Client " + arg1.getId() + " failed to create a new account\n");
+				e1.printStackTrace();
+			}
+
+			// Send the result to the client.
+			try
+			{
+				arg1.sendToClient(result);
+			}
+			catch (IOException e)
+			{
+				return;
+			}
+
+		}
+
+		//Handle New Game
+		else if (arg0 instanceof NewGameData)
+		{
+			//Assign client player1
+
+			//Wait for other players
+
+			//Send to Game panel when full
+		}
+
+		//Handle Join Game
+		else if (arg0 instanceof JoinGameData)
+		{
+
+			//Search for existing Game slots
+
+			//Assign player number
+
+			// When game slot 2 (or 4) filled, create Game
+		}
+
+		//Handle Game object, validate moves, update game state and send to all clients
+		if(arg0 instanceof TopCard) {
+			manageGame.setTopCard((TopCard)arg0);
+			this.sendToAllClients((TopCard)arg0);
+		}
 		
-				//Handle New Game
-				else if (arg0 instanceof NewGameData)
-				{
-					//Assign client player1
-					
-					//Wait for other players
-					
-					//Send to Game panel when full
+		if(arg0 instanceof String) {
+			String message = (String)arg0;
+			if(message.equals("REQUEST A CARD")) {
+				try {
+					System.out.println("card requested");
+					arg1.sendToClient(manageGame.addCard());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-		
-				//Handle Join Game
-				else if (arg0 instanceof JoinGameData)
-				{
-		
-					//Search for existing Game slots
-					
-					//Assign player number
-					
-					// When game slot 2 (or 4) filled, create Game
-				}
-		
-				//Handle Game object, validate moves, update game state and send to all clients
-				else if (arg0 instanceof GameData)
-				{
-					//Take in Game command
-					
-					//Based on command, manage the game by invoking its methods
-					
-					//Fetch existing  game
-						//Create initial hand and first cards
-					
-					//Get player turn 
-					
-					//Validate move
-					
-					//Update game
-					
-					
-					
-				}
+			}
+		}
 	}
-
-
 }
