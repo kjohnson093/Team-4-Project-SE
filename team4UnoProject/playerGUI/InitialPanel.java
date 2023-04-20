@@ -46,3 +46,4 @@ public class InitialPanel extends JPanel {
 		add(buttonsPanel, BorderLayout.SOUTH);
 	}
 }
+
