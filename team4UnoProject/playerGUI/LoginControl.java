@@ -5,6 +5,8 @@ import javax.swing.*;
 
 import playerClient.PlayerClient;
 
+//import playerClient.PlayerClient;
+
 import java.awt.event.*;
 import java.io.IOException;
 
@@ -19,6 +21,7 @@ public class LoginControl implements ActionListener
   {
     this.container = container;
     this.client = client;
+    
   }
   
   // Handle button clicks.
@@ -76,4 +79,6 @@ public class LoginControl implements ActionListener
     loginPanel.setError(error);
   }
 }
+
+
 
