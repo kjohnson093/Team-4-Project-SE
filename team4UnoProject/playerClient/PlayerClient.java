@@ -1,8 +1,21 @@
 package playerClient;
 
+import java.util.ArrayList;
+
+import playerGUI.LoginControl;
+import playerGUI.CreateAccountControl;
+import playerGUI.InitialControl;
+import playerGUI.LoginData;
+import playerGUI.NewGameData;
+import playerGUI.InitialMenuControl;
+import playerGUI.GameControl;
+import playerGUI.Error;
+import playerGUI.TopCard;
+import playerGUI.Card;
+
 import ocsf.client.AbstractClient;
-import gameManagement.GameData;
-import playerGUI.*;
+//import gameManagement.GameData;
+//import playerGUI.*;
 
 public class PlayerClient extends AbstractClient {
 
@@ -13,15 +26,18 @@ public class PlayerClient extends AbstractClient {
     private NewGameData newGameData;
     private InitialMenuControl initialMenuControl;
     private GameControl gameControl;
+    
 
-    public PlayerClient() {
-        super("localhost", 8300);
-    }
+	public boolean isCurrent=true;
+	public PlayerClient() {
+		//super("10.251.25.103", 8300);
+		super("localhost", 8300);
+	}
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     protected void handleMessageFromServer(Object msg) {
-       // If we received a String, figure out what this event is.
-	    if (msg instanceof String)
+    	if (msg instanceof String)
 	    {
 	      // Get the text of the message.
 	      String message = (String)msg;
@@ -57,6 +73,24 @@ public class PlayerClient extends AbstractClient {
 	        createAccountControl.displayError(error.getMessage());
 	      }
 	    }
+    	
+    	if(msg instanceof TopCard) {
+    		System.out.println("received topCard");
+    		gameControl.setTopCard((TopCard)msg);
+		}
+    	
+		if(msg instanceof ArrayList) {
+			System.out.println("received Arraylist");
+			gameControl.setDeck((ArrayList<Card>)msg);
+		}
+		
+		if(msg instanceof Boolean) {
+			isCurrentPlayer((Boolean)msg);
+		}
+		
+		if(msg instanceof Card) {
+			gameControl.addCardToDeck((Card)msg);
+		}
     }
 
     public void connectionException(Throwable exception) {
@@ -124,4 +158,9 @@ public class PlayerClient extends AbstractClient {
     public void setGameControl(GameControl gameControl) {
         this.gameControl = gameControl;
     }
+
+	public boolean isCurrentPlayer(boolean isCurrent) {
+		this.isCurrent=isCurrent;
+		return this.isCurrent;
+	}
 }
