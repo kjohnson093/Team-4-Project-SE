@@ -63,7 +63,8 @@ public class CreateAccountControl implements ActionListener
 			CreateAccountData data = new CreateAccountData(username, password);
 			
 			try
-			{
+			{	
+				client.openConnection();
 				client.sendToServer(data);
 			}
 			catch (IOException e)
