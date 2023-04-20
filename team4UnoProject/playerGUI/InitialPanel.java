@@ -13,7 +13,7 @@ public class InitialPanel extends JPanel {
 //		JLabel label = new JLabel("Let's Play UNO", JLabel.CENTER);
 
 		// Create the image label.
-		ImageIcon image = new ImageIcon("Uno.png"); 
+		ImageIcon image = new ImageIcon("images/Uno.png"); 
 		JLabel imageLabel = new JLabel(image);
 		
 		int desiredWidth = 200; // Specify the desired width
