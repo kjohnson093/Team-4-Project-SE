@@ -151,9 +151,21 @@ public class GamePanel extends JPanel
 		displayTopCard();
 	}
 
-	public void getSevenCards(ArrayList<Card> firstSeven) {
+	public void getSevenCards(ArrayList<Card> firstSeven)
+	{
 		myDeck = firstSeven;
 	}
+	
+	public void setHand(ArrayList <Card> myDeck)
+	{
+		this.myDeck = myDeck;
+	}
+	
+	public ArrayList<Card> getHand()
+	{
+		return myDeck;
+	}
+	
 }
 
 

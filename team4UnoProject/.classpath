@@ -6,7 +6,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/HomeUser/Documents/UNI Projects - GitHub Local Repositories/Team 4 Uno Project Local Repository/team4UnoProject/ocsf.jar"/>
-	<classpathentry kind="lib" path="C:/Users/HomeUser/Documents/UNI Projects - GitHub Local Repositories/Team 4 Uno Project Local Repository/team4UnoProject/mysql-connector-java-5.1.40-bin.jar"/>
+	<classpathentry kind="lib" path="/Examples/mysql-connector-java-5.1.40-bin.jar"/>
+	<classpathentry kind="lib" path="/Examples/ocsf.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

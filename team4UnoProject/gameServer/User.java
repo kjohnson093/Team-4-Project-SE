@@ -1,5 +1,6 @@
 package gameServer;
 
-public class User {
+public class User
+{
 
 }

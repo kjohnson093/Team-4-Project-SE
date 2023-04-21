@@ -1,6 +1,7 @@
 package playerGUI;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class GameCards {
@@ -58,6 +59,11 @@ public class GameCards {
 	}
 	public int totalCardsLeft() {
 		return cards.size();
+	}
+	
+	public void shuffleCards()
+	{
+		Collections.shuffle(cards);
 	}
 	
 	public void initializeCards() {

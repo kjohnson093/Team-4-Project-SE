@@ -8,6 +8,7 @@ import java.util.Enumeration;
 
 import javax.swing.*;
 
+import gameServer.GameManagement;
 import playerClient.PlayerClient;
 
 public class GameControl implements ActionListener{
@@ -15,14 +16,24 @@ public class GameControl implements ActionListener{
 	private JPanel container;
 	JLabel error = new JLabel("PLEASE PLAY A VALID CARD");
 	PlayerClient client;
+	private String command;
+	
 
 	public GameControl(JPanel container, PlayerClient client) {
 		this.container=container;
 		this.client= client;
-		
 		//System.out.println(this.client.getInetAddress());
 	}
+	
+	public void setCommand(String command)
+	{
+		this.command = command;
+	}
 
+	public String getCommand()
+	{
+		return command;
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
