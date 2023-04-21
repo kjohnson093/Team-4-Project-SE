@@ -33,7 +33,7 @@ public class PlayerClient extends AbstractClient {
 		//super("10.251.25.103", 8300);
 		super("localhost", 8300);
 	}
-	//Testingbla
+	//Testingblasfafe
     @SuppressWarnings("unchecked")
 	@Override
     protected void handleMessageFromServer(Object msg) {
