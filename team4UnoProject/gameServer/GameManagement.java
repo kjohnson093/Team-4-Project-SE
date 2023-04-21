@@ -162,6 +162,7 @@ public class GameManagement {
 	{
 		//Shuffle the cards
 		allCards.shuffleCards();
+		///Testing
 		
 		//DealCards
 		deal7();
