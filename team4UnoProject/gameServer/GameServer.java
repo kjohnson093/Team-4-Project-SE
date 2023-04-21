@@ -198,7 +198,7 @@ public class GameServer extends AbstractServer {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
+			}//b
 
 			if(message.equals("LOGIN SUCCESS, UPDATE GAMEPANEL NOW**")) {
 

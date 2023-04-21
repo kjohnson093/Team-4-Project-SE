@@ -117,7 +117,7 @@ public class ServerGUI extends JFrame
 		new ServerGUI();
 	}
 
-	// Getters for the important components.
+	// Getters for the important compjhonents.
 	public JTextField getTextFieldAt(int index)
 	{
 		return textFields[index];
