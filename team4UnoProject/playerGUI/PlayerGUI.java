@@ -50,6 +50,7 @@ public class PlayerGUI extends JFrame
     client.setInitialMenuControl(imc);
     client.setGameControl(gc);
     
+    
     // Create the four views. (need the controller to register with the Panels
     JPanel view1 = new InitialPanel(ic);
     JPanel view2 = new LoginPanel(lc);

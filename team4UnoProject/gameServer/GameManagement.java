@@ -12,7 +12,6 @@ import playerGUI.GameCards;
 import playerGUI.Card;
 import playerGUI.GameControl;
 import playerGUI.GamePanel;
-import playerGUI.PlayerGUI;
 
 public class GameManagement {
 	private GamePanel panel;
@@ -144,15 +143,18 @@ public class GameManagement {
 		
 	}
 	
-	public boolean isPlayerTurn(long id)
+	public void isPlayerTurn(long id)
 	{
 		currentPlayer = playerTurnOrder.poll();
 		if(id == currentPlayer)
 		{
-			return true;
+			client.isCurrentPlayer(true);
 		}
-		
-		return false;
+		else
+		{
+			client.isCurrentPlayer(false);
+		}
+
 	
 	}
 	
@@ -168,7 +170,7 @@ public class GameManagement {
 		getTopCard();
 		
 		
-		currentPlayer = playerTurnOrder.poll();
+		
 		
 		
 		
