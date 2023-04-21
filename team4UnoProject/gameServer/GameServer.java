@@ -209,12 +209,12 @@ public class GameServer extends AbstractServer {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				try {
-					arg1.sendToClient(false);
-				} catch (IOException e1) {
+				//try {
+				//	arg1.sendToClient(false);
+				//} catch (IOException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				//	e1.printStackTrace();
+				//}
 			}
 		}
 	}
