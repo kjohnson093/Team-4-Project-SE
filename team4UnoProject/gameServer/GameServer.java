@@ -1,4 +1,5 @@
-* Keondre Johnson
+/*
+ * Keondre Johnson
  * 
  * This program runs a server for handling clients connecting to each other in an UNO! game.
  * The server will also maintain the database.
@@ -21,7 +22,7 @@ import database.UserDatabase;
 
 public class GameServer extends AbstractServer {
 
-	GameManagement manageGame;
+	GameManagement manageGame=new GameManagement(this);
 	//Corresponding text area and label with ServerGUI
 	private JTextArea log; 
 	private JLabel status; 
@@ -94,19 +95,7 @@ public class GameServer extends AbstractServer {
 	//Update GUI when client connects
 	public void clientConnected(ConnectionToClient client) {
 		log.append("Client " + client.getId() + " connected\n");
-		manageGame.numberOfPlayers++;
-		
-		try {
-			client.sendToClient(manageGame.topCard);
-			client.sendToClient(manageGame.deal7());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
-	public void setGameManagement(GameManagement manageGame) {
-		this.manageGame = manageGame;
 	}
 
 	@Override
@@ -198,7 +187,7 @@ public class GameServer extends AbstractServer {
 			manageGame.setTopCard((TopCard)arg0);
 			this.sendToAllClients((TopCard)arg0);
 		}
-		
+
 		if(arg0 instanceof String) {
 			String message = (String)arg0;
 			if(message.equals("REQUEST A CARD")) {
@@ -210,6 +199,24 @@ public class GameServer extends AbstractServer {
 					e.printStackTrace();
 				}
 			}
+
+			if(message.equals("LOGIN SUCCESS, UPDATE GAMEPANEL NOW**")) {
+
+				try {
+					arg1.sendToClient(manageGame.topCard);
+					arg1.sendToClient(manageGame.deal7());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				try {
+					arg1.sendToClient(false);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 		}
 	}
 }
+
