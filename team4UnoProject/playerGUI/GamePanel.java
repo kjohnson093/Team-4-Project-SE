@@ -39,7 +39,8 @@ public class GamePanel extends JPanel
 		board.add(updatesPanel);
 		updatesPanel.add(updatesLabel);
 		panel.add(panel_4,BorderLayout.EAST);
-		panel.add(deck,BorderLayout.SOUTH);
+		JScrollPane panel = new JScrollPane(deck);
+		panel.add(panel,BorderLayout.SOUTH);
 		useCard.addActionListener(gc);	
 		addCard.addActionListener(gc);
 	}
