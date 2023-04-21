@@ -8,6 +8,7 @@ import playerClient.PlayerClient;
 //import playerClient.PlayerClient;
 
 import java.awt.event.*;
+import java.io.IOException;
 
 public class InitialMenuControl implements ActionListener
 {
@@ -36,6 +37,12 @@ public class InitialMenuControl implements ActionListener
 			//loginPanel.setError("");
 			CardLayout cardLayout = (CardLayout)container.getLayout();
 			cardLayout.show(container, "5");
+			try {
+				client.sendToServer("LOGIN SUCCESS, UPDATE GAMEPANEL NOW**");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
 
@@ -46,8 +53,13 @@ public class InitialMenuControl implements ActionListener
 			//createAccountPanel.setError("");
 			CardLayout cardLayout = (CardLayout)container.getLayout();
 			cardLayout.show(container, "5");
+			
+			try {
+				client.sendToServer("LOGIN SUCCESS, UPDATE GAMEPANEL NOW**");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }
-
-
