@@ -159,23 +159,7 @@ public class GameManagement {
 	}
 	
 	public void start() 
-	{
-		//Shuffle the cards
-		allCards.shuffleCards();
-		///Testingblamgs;kkhgkhg
-		
-		//DealCards
-		deal7();
-		
-		//Place Top Card
-		getTopCard();
-		
-		
-		
-		
-		
-		
-		
+	{	
 		
 	}
 	
