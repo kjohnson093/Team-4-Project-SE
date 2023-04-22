@@ -7,12 +7,8 @@ import java.util.*;
 import javax.swing.JPanel;
 
 import playerClient.PlayerClient;
-import playerGUI.TopCard;
-import playerGUI.GameCards;
-import playerGUI.Card;
-import playerGUI.GameControl;
-import playerGUI.GamePanel;
-//bb
+import playerGUI.*;
+
 public class GameManagement {
 	private GamePanel panel;
 	private GameControl gc;
@@ -40,6 +36,8 @@ public class GameManagement {
 	public GameManagement(GameServer server) 
 	{
 		this.server=server;
+		allCards = new GameCards();
+		allCards.initializeCards();
 		container = new JPanel();
 		client = new PlayerClient();
 		nextPlayerContainer = new JPanel();
@@ -50,21 +48,16 @@ public class GameManagement {
 		nextPlayerGc = new GameControl(nextPlayerContainer, nextPlayerClient);
 		previousPlayerGc = new GameControl(previousPlayerContainer, previousPlayerClient);
 		panel = new GamePanel(gc);
-		allCards.initializeCards();
 		Card temp = allCards.firstCard();
 		topCard = new TopCard(temp.getColor(),temp.getType(),Integer.parseInt(temp.getValue()));
-		allCards = new GameCards();
 		players = new ArrayList<>();
 		nextPlayerPanel = new GamePanel(nextPlayerGc);
 	    previousPlayerPanel = new GamePanel(previousPlayerGc);
 	    playerTurnOrder = new LinkedList<>();
 	    random = new Random();
-	    
-	    
-	    
-		
-		
+	    	
 	}
+	
 	public void playersConnected(Long id)
 	{
 		players.add(id);
@@ -90,7 +83,7 @@ public class GameManagement {
 	
 	public void setTopCard(TopCard top)
 	{
-		top = new TopCard(allCards.firstCard().getColor(),allCards.firstCard().getType(),Integer.parseInt(allCards.firstCard().getValue()));
+		this.topCard = top;
 	}
 	public TopCard getTopCard() 
 	{
@@ -99,6 +92,7 @@ public class GameManagement {
 	
 	public ArrayList<Card> deal7()
 	{
+		System.out.println("return 7");
 		return allCards.deal7();
 	}
 	
@@ -154,16 +148,10 @@ public class GameManagement {
 		{
 			client.isCurrentPlayer(false);
 		}
-
-	
 	}
 	
 	public void start() 
-	{	
+	{
 		
 	}
-	
-	
-	
-
 }
