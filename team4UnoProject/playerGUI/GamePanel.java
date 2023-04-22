@@ -50,7 +50,6 @@ public class GamePanel extends JPanel
 		deck.removeAll();
 		deck.repaint();
 		deck.revalidate();
-		boolean contains = false;
 
 		for(int i = 0; i < myDeck.size(); i++) 
 		{
@@ -69,18 +68,8 @@ public class GamePanel extends JPanel
 			deckGroup.add(myDeck.get(i));
 		}
 		
-		for(int i = 0; i<myDeck.size(); i++) {
-			if((topCard.getColor().equals(myDeck.get(i).getColor())||myDeck.get(i).getColor().equals("all") || topCard.getValue().equals(myDeck.get(i).getValue())&&!myDeck.get(i).getValue().equals("-1"))) {
-				contains=true;
-				break;
-			}
-		}
-		
-		if(!contains && myDeck.size() > 0) {
-			deck.add(addCard);
-		}
-		
 		deck.add(useCard);
+		deck.add(addCard);
 		deck.repaint();
 		deck.revalidate();
 	}
