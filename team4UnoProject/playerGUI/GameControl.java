@@ -69,18 +69,27 @@ public class GameControl implements ActionListener{
 					e1.printStackTrace();
 				}
 			}
-			else if(temp.getColor().equals("all")||temp.getType().equals("wild")) {
+			else if (temp.getColor().equals("all") || temp.getType().equals("wild")) {
+
+				/*
+				 * TopCard temp2 = new
+				 * TopCard(JOptionPane.showInputDialog("COLOR PICKING MUST BE IMPLEMENTED"),
+				 * temp.getType(), Integer.parseInt(temp.getValue()));
+				 */
 				
-				TopCard temp2 = new TopCard(JOptionPane.showInputDialog("COLOR PICKING MUST BE IMPLEMENTED"),temp.getType(),Integer.parseInt(temp.getValue()));
+				Object[] options = {"Blue", "Yellow", "Green", "Red"};
+				int n = JOptionPane.showOptionDialog(null,"Please choose a color", "",JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+				String playerChoice = (String) options[n];
+				TopCard temp2 = new TopCard(playerChoice, temp.getType(), Integer.parseInt(temp.getValue()));
+				
 				try {
 					gamePanel.myDeck.remove(temp);
 					gamePanel.updateDeck();
 					client.sendToServer(temp2);
-					//client.isCurrentPlayer(false);
+					// client.isCurrentPlayer(false);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-			}
 			
 			else if(!client.isCurrent) {
 				System.out.println("Please wait your turn");
