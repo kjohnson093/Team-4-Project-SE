@@ -183,10 +183,16 @@ public class GameServer extends AbstractServer {
 			if(((TopCard)arg0).getType().equals("skip")){
 				manageGame.skip();
 			}
-			
+
 			if(((TopCard)arg0).getType().equals("reverse")){
 				manageGame.reverse();
 			}
+
+			if(((TopCard)arg0).getType().equals("wild")  || ((TopCard)arg0).getType().equals("draw4")){
+				this.sendToAllClients(new JLabel("Wild Card Color is "+((TopCard)arg0).getColor()));
+			}
+
+
 		}
 
 		if(arg0 instanceof String) {
