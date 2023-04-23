@@ -56,7 +56,7 @@ public class GameControl implements ActionListener{
 				int n = JOptionPane.showOptionDialog(null,"Please choose a color", "",JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 				String playerChoice = (String) options[n];
 				
-				TopCard temp2 = new TopCard(playerChoice, temp.getType(), Integer.parseInt(temp.getValue()));
+				TopCard temp2 = new TopCard(playerChoice.toLowerCase(), temp.getType(), Integer.parseInt(temp.getValue()));
 				
 				try {
 					gamePanel.myDeck.remove(temp);
