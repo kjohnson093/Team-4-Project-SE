@@ -95,7 +95,12 @@ public class GameServer extends AbstractServer {
 	//Update GUI when client connects
 	public void clientConnected(ConnectionToClient client) {
 		log.append("Client " + client.getId() + " connected\n");
-
+		manageGame.playersConnected(client.getId());
+	}
+	
+	public void clientDisconnected(ConnectionToClient client) {
+		log.append("Client " + client.getId() + " Disconnected\n");
+		manageGame.removePlayer(client.getId());
 	}
 
 	@Override
@@ -209,13 +214,6 @@ public class GameServer extends AbstractServer {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				//try {
-				//	arg1.sendToClient(false);
-				//} catch (IOException e1) {
-					// TODO Auto-generated catch block
-				//	e1.printStackTrace();
-				//}
-				//Testingblaaklfnjalkjkhkhjgb
 			}
 		}
 	}
