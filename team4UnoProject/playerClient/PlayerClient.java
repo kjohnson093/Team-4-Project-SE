@@ -85,7 +85,7 @@ public class PlayerClient extends AbstractClient {
 	      }
 	    }
     	
-    	if(msg instanceof TopCard) {
+    		if(msg instanceof TopCard) {
     		System.out.println("received topCard");
     		gameControl.setTopCard((TopCard)msg);
 		}
@@ -101,6 +101,10 @@ public class PlayerClient extends AbstractClient {
 		
 		if(msg instanceof Card) {
 			gameControl.addCardToDeck((Card)msg);
+		}
+	    
+	    if(msg instanceof JLabel) {
+			gameControl.updateLabel(((JLabel)msg));
 		}
     }
 
