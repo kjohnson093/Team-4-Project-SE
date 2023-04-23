@@ -1,6 +1,8 @@
 /*
  * Keondre Johnson
- * 
+ * Julius Kwakye
+ * RoJon Barnett
+ *
  * This program runs a server for handling clients connecting to each other in an UNO! game.
  * The server will also maintain the database.
  */
@@ -177,27 +179,6 @@ public class GameServer extends AbstractServer {
 				return;
 			}
 
-		}
-
-		//Handle New Game
-		else if (arg0 instanceof NewGameData)
-		{
-			//Assign client player1
-
-			//Wait for other players
-
-			//Send to Game panel when full
-		}
-
-		//Handle Join Game
-		else if (arg0 instanceof JoinGameData)
-		{
-
-			//Search for existing Game slots
-
-			//Assign player number
-
-			// When game slot 2 (or 4) filled, create Game
 		}
 
 		//Handle Game object, validate moves, update game state and send to all clients
