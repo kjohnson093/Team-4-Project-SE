@@ -127,7 +127,7 @@ public class GameControl implements ActionListener{
 
 	public void setDeck(ArrayList<Card> myDeck) {
 		GamePanel gamePanel = (GamePanel)container.getComponent(4);
-		gamePanel.myDeck=myDeck;
+		gamePanel.myDeck.addAll(myDeck);
 		gamePanel.updateDeck();
 		gamePanel.revalidate();
 		gamePanel.repaint();
