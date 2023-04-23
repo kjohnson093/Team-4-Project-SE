@@ -1,11 +1,12 @@
 package gameServer;
 
-
 import java.util.ArrayList;
+import java.io.IOException;
 import java.util.*;
 
 import javax.swing.JPanel;
 
+import ocsf.server.ConnectionToClient;
 import playerClient.PlayerClient;
 import playerGUI.*;
 
@@ -17,8 +18,8 @@ public class GameManagement {
 	private GameServer server;
 	private TopCard topCard;
 	private GameCards allCards;
-	private long currentPlayer;
-	private ArrayList<Long> players;
+	private Long currentPlayer;
+	ArrayList<Long> players;
 	private JPanel container;
 	private JPanel nextPlayerContainer;
 	private JPanel previousPlayerContainer;
@@ -62,19 +63,30 @@ public class GameManagement {
 	{
 		players.add(id);
 		playerTurnOrder.add(id);
+		System.out.println(players.size());
 		if(players.size() >= 2) 
 		{
-			try 
-			{
-				Thread.sleep(40000);
-				start();
-			} catch (InterruptedException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try 
+//			{
+//				//Thread.sleep(40000);
+//				start();
+//			} catch (InterruptedException e)
+//			{
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+			start();
 		}
 	}
+	
+	public void removePlayer(Long id)
+	{
+		players.remove(id);
+		playerTurnOrder.remove(id);
+	}
+	
+	
+	
 	
 	public int getTotalNoCards()
 	{
@@ -92,7 +104,6 @@ public class GameManagement {
 	
 	public ArrayList<Card> deal7()
 	{
-		System.out.println("return 7");
 		return allCards.deal7();
 	}
 	
@@ -119,25 +130,27 @@ public class GameManagement {
 		return false;
 	}
 	
-	public void Draw2()
+	public void Draw2(/*ConnectionToClient arg1*/)
 	{
-		for (int i = 0; i < 2; i++)
-		{
-			panel.addCard();
-		}
-
+		
 	}
 	
 	public void Draw4()
 	{
-		for (int i = 0; i < 2; i++)
-		{
-			panel.addCard();
-		}
 		
 	}
 	
-	public void isPlayerTurn(long id)
+	public void skip()
+	{
+		
+	}
+	
+	public void reverse() 
+	{
+		
+	}
+	
+	public void isPlayerTurn(Long id)
 	{
 		currentPlayer = playerTurnOrder.poll();
 		if(id == currentPlayer)
@@ -150,8 +163,24 @@ public class GameManagement {
 		}
 	}
 	
+	
+//	public void checkCard(Card card) {
+//		if(card.getType().equals("draw4")) {
+//			Draw4();
+//		}
+//		if(card.getType().equals("draw2")) {
+//			//Draw2();
+//		}
+//		if(card.getType().equals("reverse")) {
+//
+//		}
+//		if(card.getType().equals("skip")) {
+//
+//		}
+//	}
+	
 	public void start() 
 	{
-		
+		return;
 	}
 }
