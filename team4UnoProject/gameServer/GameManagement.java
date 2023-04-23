@@ -42,11 +42,11 @@ public class GameManagement {
     {
         players.add(id);
         playerTurnOrder.add(id);
-        if(players.size() >= 2) 
+        if(players.size() == 3) 
         {
             try 
             {
-                Thread.sleep(40000); // wait 40 seconds before starting game
+                //Thread.sleep(40000); // wait 40 seconds before starting game
                 start();
             } 
             catch (InterruptedException e)
