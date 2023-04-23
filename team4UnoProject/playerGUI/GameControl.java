@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 
 import javax.swing.*;
-//testljhoj
 
 import playerClient.PlayerClient;
 
@@ -16,30 +15,13 @@ public class GameControl implements ActionListener{
 	private JPanel container;
 	JLabel error = new JLabel("PLEASE PLAY A VALID CARD");
 	PlayerClient client;
-	private String command;
-    
-	
-
 
 	public GameControl(JPanel container, PlayerClient client) {
 		this.container=container;
 		this.client= client;
 		//System.out.println(this.client.getInetAddress());
 	}
-	
-	public void updateTurn(boolean isPlayerTurn)
-	{
-		
-	}
-	public void setCommand(String command)
-	{
-		this.command = command;
-	}
 
-	public String getCommand()
-	{
-		return command;
-	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
@@ -69,30 +51,43 @@ public class GameControl implements ActionListener{
 					e1.printStackTrace();
 				}
 			}
-			else if (temp.getColor().equals("all") || temp.getType().equals("wild")) {
-
-				/*
-				 * TopCard temp2 = new
-				 * TopCard(JOptionPane.showInputDialog("COLOR PICKING MUST BE IMPLEMENTED"),
-				 * temp.getType(), Integer.parseInt(temp.getValue()));
-				 */
-				
+			else if((temp.getColor().equals("all")||temp.getType().equals("wild"))&& client.isCurrent) {
 				Object[] options = {"Blue", "Yellow", "Green", "Red"};
 				int n = JOptionPane.showOptionDialog(null,"Please choose a color", "",JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 				String playerChoice = (String) options[n];
+				
 				TopCard temp2 = new TopCard(playerChoice, temp.getType(), Integer.parseInt(temp.getValue()));
 				
 				try {
 					gamePanel.myDeck.remove(temp);
 					gamePanel.updateDeck();
 					client.sendToServer(temp2);
-					// client.isCurrentPlayer(false);
+					//client.isCurrentPlayer(false);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
+			}
+			
+			else if((temp.getType().equals("skip")||temp.getType().equals("reverse")||temp.getType().equals("draw2")) && client.isCurrent && gamePanel.topCard.getType().equals(temp.getType())) {
+				
+				TopCard temp2 = new TopCard(temp.getColor(),temp.getType(),Integer.parseInt(temp.getValue()));
+				try {
+					gamePanel.myDeck.remove(temp);
+					gamePanel.updateDeck();
+					client.sendToServer(temp2);
+					//client.isCurrentPlayer(false);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
 			
 			else if(!client.isCurrent) {
 				System.out.println("Please wait your turn");
+				error.setText("Please wait your turn");
+				error.setForeground(Color.RED);
+				gamePanel.board.add(error);
+				gamePanel.revalidate();
+				gamePanel.repaint();
 			}
 
 			else {
@@ -114,7 +109,7 @@ public class GameControl implements ActionListener{
 				gamePanel.repaint();			
 			}
 			
-			else if(gamePanel.myDeck.size() <= 12){
+			else {//if(gamePanel.myDeck.size() <= 12){
 				try {
 					client.sendToServer("REQUEST A CARD");
 					//client.isCurrentPlayer(false);
