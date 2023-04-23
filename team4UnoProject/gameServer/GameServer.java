@@ -4,8 +4,10 @@
  * This program runs a server for handling clients connecting to each other in an UNO! game.
  * The server will also maintain the database.
  */
+// Package that the GameServer class belongs to.
 package gameServer;
 
+// import various libraries and classes
 import ocsf.server.*;
 import java.awt.Color;
 import java.io.IOException;
@@ -19,19 +21,25 @@ import playerGUI.NewGameData;
 import playerGUI.JoinGameData;
 import playerGUI.TopCard;
 import database.UserDatabase;
-
+//Declare the GameServer class and makes it a subclass of the AbstractServer class.
 public class GameServer extends AbstractServer {
 
+	//new instance of the GameManagement class, 
+	//which will manage the game for the clients that connect to the server.
 	GameManagement manageGame=new GameManagement(this);
 	//Corresponding text area and label with ServerGUI
 	private JTextArea log; 
 	private JLabel status; 
+	//Tracks whether the server is currently running
 	private boolean running = false;
 	//private ArrayList<Game> activeGames;
+	
+	//Represents the database where user account information is stored.
 	private UserDatabase database = new UserDatabase();
 
 	public GameServer() {
 		super(8300);
+		
 		this.setPort(8300);
 		try {
 			this.listen();
@@ -42,7 +50,7 @@ public class GameServer extends AbstractServer {
 		// TODO Auto-generated constructor stub
 	}
 
-	//Set ServerGUI log and status
+	//sets the server's port to 8300 and starts listening for client connections on that port.
 	public void setLog(JTextArea log) {
 		this.log = log;
 	}
@@ -62,6 +70,8 @@ public class GameServer extends AbstractServer {
 		return running;
 	}
 
+	//alled when an exception occurs while the server is listening for connections. It logs the exception's
+	//message to the server's log and prints the stack trace to the console.
 	public void listeningException(Throwable exception) {
 		log.append("Listening Exception Occurred: " + exception.getMessage() + "\n");
 		exception.printStackTrace();;
@@ -100,7 +110,7 @@ public class GameServer extends AbstractServer {
 	
 	public void clientDisconnected(ConnectionToClient client) {
 		log.append("Client " + client.getId() + " Disconnected\n");
-		manageGame.removePlayer(client.getId());
+		
 	}
 
 	@Override
@@ -118,10 +128,11 @@ public class GameServer extends AbstractServer {
 				if (database.verifyAccount(data.getUsername(), data.getPassword()))
 				{
 					result = "LoginSuccessful";
+					// Log successful login attempt
 					log.append("Client " + arg1.getId() + " successfully logged in as " + data.getUsername() + "\n");
 				}
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
+				// Log failed login attempt and print stack trace
 				log.append("Client " + arg1.getId() + " failed to log in\n");
 				e1.printStackTrace();
 			}
@@ -147,9 +158,11 @@ public class GameServer extends AbstractServer {
 				if (database.createNewAccount(data.getUsername(), data.getPassword()))
 				{
 					result = "CreateAccountSuccessful";
+					// Log successful account creation
 					log.append("Client " + arg1.getId() + " created a new account called " + data.getUsername() + "\n");
 				}
 			} catch (Exception e1) {
+				// Log failed account creation attempt and print stack trace
 				log.append("Client " + arg1.getId() + " failed to create a new account\n");
 				e1.printStackTrace();
 			}
@@ -188,29 +201,79 @@ public class GameServer extends AbstractServer {
 		}
 
 		//Handle Game object, validate moves, update game state and send to all clients
-		if(arg0 instanceof TopCard) {
+		if(arg0 instanceof TopCard) 
+		{
+			// Set the new top card for the game
 			manageGame.setTopCard((TopCard)arg0);
+			//If card is a draw2 special card, draws card for client
+			if (((TopCard)arg0).getType().equals("draw2"))
+			{
+				// Send the cards to the client.
+				try
+				{
+					arg1.sendToClient(manageGame.Draw2());
+				}
+				catch (IOException e)
+				{
+					return;
+				}
+		    }
+			else if(((TopCard)arg0).getType().equals("draw4"))
+			{
+				// Send the cards to the client.
+				try
+				{
+					arg1.sendToClient(manageGame.Draw4());
+				}
+				catch (IOException e)
+				{
+					return;
+				}
+			}
+			else if(((TopCard)arg0).getType().equals("reverse"))
+			{
+				//Reverse the order for all clients
+				manageGame.reverse();
+			}
+			else if(((TopCard)arg0).getType().equals("reverse"))
+			{
+				//Skip the next player
+				manageGame.skip();
+			}
+			// Send the new top card to all clients
+			//Sends the top card after a special card  is called,
+			//so that all clients receive the updated game state
 			this.sendToAllClients((TopCard)arg0);
+				
+			
 		}
-
-		if(arg0 instanceof String) {
+		
+		// Handle requests to draw a card
+		if(arg0 instanceof String) 
+		{
+			// initialize message to a string casted argument
 			String message = (String)arg0;
-			if(message.equals("REQUEST A CARD")) {
-				try {
+			if(message.equals("REQUEST A CARD")) 
+			{	// Send a card to the client
+				try 
+				{
 					System.out.println("card requested");
 					arg1.sendToClient(manageGame.addCard());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}//b
-
-			if(message.equals("LOGIN SUCCESS, UPDATE GAMEPANEL NOW**")) {
-
-				try {
+			}
+			// Handle successful login and update game panel
+			if(message.equals("LOGIN SUCCESS, UPDATE GAMEPANEL NOW**"))
+			{
+				// Send the top card and deal 7 cards to the client
+				try
+				{
 					arg1.sendToClient(manageGame.getTopCard());
 					arg1.sendToClient(manageGame.deal7());
-				} catch (IOException e) {
+				} catch (IOException e)
+				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

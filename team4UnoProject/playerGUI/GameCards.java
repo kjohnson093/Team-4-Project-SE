@@ -31,6 +31,23 @@ public class GameCards {
 		return dealt_cards;
 	}
 	
+	public ArrayList<Card> draw4() {
+		ArrayList<Card> dealt_cards = new ArrayList<Card>();
+		for(int i = 0; i < 4; i++) {
+			dealt_cards.add(oneCard());
+		}
+		return dealt_cards;
+	}
+	
+	public ArrayList<Card> draw2()
+	{
+		ArrayList<Card> dealt_cards = new ArrayList<Card>();
+		for(int i = 0; i < 2; i++)
+		{
+			dealt_cards.add(oneCard());
+		}
+		return dealt_cards;
+	}
 	public Card oneCard() {
 		Random rand = new Random();
 		int i = rand.nextInt(cards.size());
