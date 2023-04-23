@@ -156,4 +156,11 @@ public class GameControl implements ActionListener{
 		gamePanel.revalidate();
 		gamePanel.repaint();
 	}
+	
+	public void updateLabel(JLabel message) {
+		GamePanel gamePanel = (GamePanel)container.getComponent(4);
+		gamePanel.addToUpdatesPanel(message);
+		gamePanel.revalidate();
+		gamePanel.repaint();
+	}
 }
