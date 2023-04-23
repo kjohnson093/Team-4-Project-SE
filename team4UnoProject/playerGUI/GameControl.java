@@ -52,10 +52,19 @@ public class GameControl implements ActionListener{
 				}
 			}
 			else if((temp.getColor().equals("all")||temp.getType().equals("wild"))&& client.isCurrent) {
+				String playerChoice=new String();
 				Object[] options = {"Blue", "Yellow", "Green", "Red"};
-				int n = JOptionPane.showOptionDialog(null,"Please choose a color", "",JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-				String playerChoice = (String) options[n];
+				int n = 0;
 				
+				do {
+				n = JOptionPane.showOptionDialog(null,"Please choose a color", "",JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE, null, options, options[0]);				
+				if(n >= 0) {
+					break;
+				}
+				System.out.println("Please choose a card color");
+				}while(true);
+				
+				playerChoice = (String) options[n];
 				TopCard temp2 = new TopCard(playerChoice.toLowerCase(), temp.getType(), Integer.parseInt(temp.getValue()));
 				
 				try {
@@ -109,7 +118,7 @@ public class GameControl implements ActionListener{
 				gamePanel.repaint();			
 			}
 			
-			else {//if(gamePanel.myDeck.size() <= 12){
+			else {
 				try {
 					client.sendToServer("REQUEST A CARD");
 					//client.isCurrentPlayer(false);
