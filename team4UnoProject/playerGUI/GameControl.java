@@ -177,7 +177,7 @@ public class GameControl implements ActionListener{
 		gamePanel.repaint();
 	}
 
-	// Sets the top card of the discard pile on the game panel.
+	//// Sets the top card of the discard pile on the game panel.
 	public void setTopCard(TopCard topCard) 
 	{
 		// Get the game panel.

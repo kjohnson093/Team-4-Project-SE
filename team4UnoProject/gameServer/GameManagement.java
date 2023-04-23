@@ -7,7 +7,7 @@ import playerClient.PlayerClient;
 import playerGUI.*;
 
 public class GameManagement {
-    // Initialize variables
+    //// Initialize variables
     private GamePanel panel;
     private GameControl gc;
     private GameControl nextPlayerGc;

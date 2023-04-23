@@ -246,7 +246,7 @@ public class GameServer extends AbstractServer {
 			this.sendToAllClients((TopCard)arg0);
 				
 			
-		}
+		}//
 		
 		// Handle requests to draw a card
 		if(arg0 instanceof String) 

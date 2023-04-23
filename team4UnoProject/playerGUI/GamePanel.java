@@ -166,7 +166,7 @@ public class GamePanel extends JPanel
 		}
 	}
 
-	//Display top card
+	////Display top card
 	public void setTopCard(TopCard top) {
 		this.topCard = top;
 		displayTopCard();

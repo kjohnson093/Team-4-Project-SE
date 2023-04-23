@@ -187,7 +187,7 @@ public class ServerGUI extends JFrame
 				}
 			}
 
-			// Handle the Stop button.
+			//// Handle the Stop button.
 			else if (buttonClicked == stop)
 			{
 				// Display an error if the server is not listening.
