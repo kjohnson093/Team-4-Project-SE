@@ -75,15 +75,22 @@ public class GameControl implements ActionListener{
 
 			// If the selected card is a Wild or a Draw 4 Wild card
 			else if((temp.getColor().equals("all")||temp.getType().equals("wild"))&& client.isCurrent) {
-				// Display a dialog to select a color
+				String playerChoice=new String();
 				Object[] options = {"Blue", "Yellow", "Green", "Red"};
-				int n = JOptionPane.showOptionDialog(null,"Please choose a color", "",JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-				String playerChoice = (String) options[n];
+				int n = 0;
+				//If the user closes the option dialog without picking a color, it asks again till a valid color is picked for the wild card.
+				do {
+				n = JOptionPane.showOptionDialog(null,"Please choose a color", "",JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE, null, options, options[0]);				
+				if(n >= 0) {
+					break;
+				}
+				//System.out.println("Please choose a card color");
+				}while(true);
 				
-				// Remove the played card from the player's deck and send the played card to the server
+				playerChoice = (String) options[n];
 				TopCard temp2 = new TopCard(playerChoice.toLowerCase(), temp.getType(), Integer.parseInt(temp.getValue()));
-				try 
-				{
+				
+				try {
 					gamePanel.myDeck.remove(temp);
 					gamePanel.updateDeck();
 					client.sendToServer(temp2);
