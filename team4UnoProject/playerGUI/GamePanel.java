@@ -183,6 +183,11 @@ public class GamePanel extends JPanel
 		return myDeck;
 	}
 	
+	public void addToUpdatesPanel(JLabel message) {
+		board.add(updatesPanel);
+		updatesPanel.removeAll();
+		updatesPanel.add(message);
+	}
 }
 
 
