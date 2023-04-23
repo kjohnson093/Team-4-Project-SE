@@ -203,7 +203,7 @@ public class GameServer extends AbstractServer {
 			if(message.equals("LOGIN SUCCESS, UPDATE GAMEPANEL NOW**")) {
 
 				try {
-					arg1.sendToClient(manageGame.topCard);
+					arg1.sendToClient(manageGame.getTopCard());
 					arg1.sendToClient(manageGame.deal7());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

@@ -32,6 +32,7 @@ public class PlayerClient extends AbstractClient {
 	public PlayerClient() {
 		//super("10.251.25.103", 8300);
 		super("localhost", 8300);
+		//super("192.168.0.24", 8300);
 	}
 	//Testingblasfafeljhlljhlj
     @SuppressWarnings("unchecked")
@@ -52,6 +53,16 @@ public class PlayerClient extends AbstractClient {
 	      else if (message.equals("CreateAccountSuccessful"))
 	      {
 	        createAccountControl.createAccountSuccess();
+	      }
+	   // If login failed, tell loginControl
+	      else if (message.equals("LoginFailed"))
+	      {
+	       loginControl.displayError("Invalid username/password.");
+	      }
+	   // If login failed, tell loginControl
+	      else if (message.equals("CreateAccountFailed"))
+	      {
+	    	  createAccountControl.displayError("Username already in use.");
 	      }
 	    }
 	    
