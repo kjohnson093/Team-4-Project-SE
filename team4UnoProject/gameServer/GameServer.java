@@ -166,31 +166,27 @@ public class GameServer extends AbstractServer {
 
 		}
 
-		//Handle New Game
-		else if (arg0 instanceof NewGameData)
-		{
-			//Assign client player1
-
-			//Wait for other players
-
-			//Send to Game panel when full
-		}
-
-		//Handle Join Game
-		else if (arg0 instanceof JoinGameData)
-		{
-
-			//Search for existing Game slots
-
-			//Assign player number
-
-			// When game slot 2 (or 4) filled, create Game
-		}
-
 		//Handle Game object, validate moves, update game state and send to all clients
 		if(arg0 instanceof TopCard) {
 			manageGame.setTopCard((TopCard)arg0);
 			this.sendToAllClients((TopCard)arg0);
+			
+			
+			if(((TopCard)arg0).getType().equals("draw2")){
+				manageGame.Draw2();
+			}
+			
+			if(((TopCard)arg0).getType().equals("draw4")){
+				manageGame.Draw4();
+			}
+			
+			if(((TopCard)arg0).getType().equals("skip")){
+				manageGame.skip();
+			}
+			
+			if(((TopCard)arg0).getType().equals("reverse")){
+				manageGame.reverse();
+			}
 		}
 
 		if(arg0 instanceof String) {
@@ -203,7 +199,7 @@ public class GameServer extends AbstractServer {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}//b
+			}
 
 			if(message.equals("LOGIN SUCCESS, UPDATE GAMEPANEL NOW**")) {
 
