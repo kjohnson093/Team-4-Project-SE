@@ -244,7 +244,10 @@ public class GameServer extends AbstractServer {
 			//Sends the top card after a special card  is called,
 			//so that all clients receive the updated game state
 			this.sendToAllClients((TopCard)arg0);
-				
+			
+			if(((TopCard)arg0).getType().equals("wild")  || ((TopCard)arg0).getType().equals("draw4")){
+				this.sendToAllClients(new JLabel("Wild Card Color is "+((TopCard)arg0).getColor()));
+			}
 			
 		}//
 		
