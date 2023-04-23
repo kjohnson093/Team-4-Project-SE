@@ -12,6 +12,9 @@ public class GamePanel extends JPanel
 	JPanel board = new JPanel();
 	JPanel panel_4 = new JPanel();
 	JPanel deck = new JPanel();
+	
+	JPanel scrollPanel = new JPanel();
+	
 	JButton useCard = new JButton("Use Card");
 	JButton addCard = new JButton("Draw Card");
 	JButton uno = new JButton("UNO!");
@@ -23,6 +26,8 @@ public class GamePanel extends JPanel
 	GameCards allcards = new GameCards();
 	JPanel updatesPanel = new JPanel();
 	JLabel updatesLabel = new JLabel("");
+	
+	JLabel YouWon = new JLabel("You won this game of UNO!!/n CONGRATULATIONS");
 
 	public GamePanel (GameControl gc) {
 
@@ -38,11 +43,14 @@ public class GamePanel extends JPanel
 		panel.add(board, BorderLayout.CENTER);
 		board.add(updatesPanel);
 		updatesPanel.add(updatesLabel);
-		panel.add(panel_4,BorderLayout.EAST);
+		panel.add(panel_4,BorderLayout.EAST);	
+		
 		JScrollPane scrollDeck = new JScrollPane(deck);
 		panel.add(scrollDeck,BorderLayout.SOUTH);
+		
 		useCard.addActionListener(gc);	
 		addCard.addActionListener(gc);
+		uno.addActionListener(gc);
 	}
 
 	public void updateDeck() 
@@ -70,6 +78,21 @@ public class GamePanel extends JPanel
 		
 		deck.add(useCard);
 		deck.add(addCard);
+		
+		if(myDeck.size() == 1) {
+			deck.add(uno);
+		}
+		else {
+			deck.remove(uno);
+		}
+		
+		if(myDeck.size() == 0){
+			deck.add(YouWon);
+		}
+		else {
+			deck.remove(YouWon);
+		}
+		
 		deck.repaint();
 		deck.revalidate();
 	}
@@ -140,21 +163,13 @@ public class GamePanel extends JPanel
 		displayTopCard();
 	}
 
-	public void getSevenCards(ArrayList<Card> firstSeven)
-	{
+	public void getSevenCards(ArrayList<Card> firstSeven) {
 		myDeck = firstSeven;
 	}
 	
-	public void setHand(ArrayList <Card> myDeck)
-	{
-		this.myDeck = myDeck;
+	public void addToUpdatesPanel(JLabel message) {
+		board.add(updatesPanel);
+		updatesPanel.removeAll();
+		updatesPanel.add(message);
 	}
-	
-	public ArrayList<Card> getHand()
-	{
-		return myDeck;
-	}
-	
 }
-
-
