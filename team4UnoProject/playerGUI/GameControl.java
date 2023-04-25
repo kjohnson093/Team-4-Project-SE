@@ -45,9 +45,15 @@ public class GameControl implements ActionListener{
 				}
 			}
 			
-			System.out.println(temp);
+			if(temp.getColor().equals(null)||temp.getType().equals(null)||temp.getValue().equals(null)) {
+				error.setText("PLEASE PLAY A VALID CARD");
+				error.setForeground(Color.RED);
+				gamePanel.board.add(error);
+				gamePanel.revalidate();
+				gamePanel.repaint();
+			}
 			
-			if((gamePanel.topCard.getColor().equals(temp.getColor())&&!temp.getColor().equals("all") || gamePanel.topCard.getValue().equals(temp.getValue())&&!temp.getValue().equals("-1") && !temp.getValue().equals("-2")) && client.isCurrent)            {
+			else if((gamePanel.topCard.getColor().equals(temp.getColor())&&!temp.getColor().equals("all") || gamePanel.topCard.getValue().equals(temp.getValue())&&!temp.getValue().equals("-1") && !temp.getValue().equals("-2")) && client.isCurrent)            {
 				gamePanel.deckGroup.remove(temp);
 				gamePanel.myDeck.remove(temp);
 				gamePanel.updateDeck();
@@ -71,7 +77,7 @@ public class GameControl implements ActionListener{
 				if(n >= 0) {
 					break;
 				}
-				System.out.println("Please choose a card color");
+
 				}while(true);
 				
 				playerChoice = (String) options[n];
@@ -105,7 +111,6 @@ public class GameControl implements ActionListener{
 			}
 			
 			else if(!client.isCurrent) {
-				System.out.println("Please wait your turn");
 				error.setText("Please wait your turn");
 				error.setForeground(Color.RED);
 				gamePanel.board.add(error);
@@ -199,9 +204,13 @@ public class GameControl implements ActionListener{
 		GamePanel gamePanel = (GamePanel)container.getComponent(4);
 		gamePanel.board.removeAll();
 		gamePanel.addToUpdatesPanel(new JLabel(message));
-		gamePanel.deck.removeAll();
+		
+		gamePanel.deck.remove(gamePanel.uno);
+		gamePanel.deck.remove(gamePanel.useCard);
+		gamePanel.deck.remove(gamePanel.addCard);
 		gamePanel.revalidate();
 		gamePanel.repaint();
+		gamePanel.myDeck.clear();
 	}
 	
 	public void updateLabel(JLabel message) {
