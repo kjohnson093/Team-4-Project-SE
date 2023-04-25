@@ -189,7 +189,7 @@ public class GameManagement {
 	}
 	
 	public ConnectionToClient getCurrentPlayer() {
-		Thread[] arrayOfClients = server.getClientConnections();
+		//Thread[] arrayOfClients = server.getClientConnections();
 		currentPlayerConnection  = (ConnectionToClient) arrayOfClients[currentPlayerNumber];
 		
 		return currentPlayerConnection;
