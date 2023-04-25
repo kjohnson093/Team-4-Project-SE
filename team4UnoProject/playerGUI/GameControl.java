@@ -1,5 +1,6 @@
 package playerGUI;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.event.*;
 import java.io.IOException;
@@ -24,22 +25,30 @@ public class GameControl implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
+		Card selectedCard=new Card();
+		Card temp=new Card();
+		Enumeration<AbstractButton> allButtons = null;
 
 		if(command == "Use Card"){
 
 			GamePanel gamePanel = (GamePanel)container.getComponent(4);
 			gamePanel.deckGroup.getElements();
 
-			Enumeration<AbstractButton> allButtons = gamePanel.deckGroup.getElements();
-			Card temp=new Card();
+			allButtons = gamePanel.deckGroup.getElements();
+			
 			while(allButtons.hasMoreElements()) {
-				temp=(Card)allButtons.nextElement();
-				if(temp.isSelected()) {
+				selectedCard = (Card)allButtons.nextElement();
+				
+				if(selectedCard.isSelected()) {
+					temp = selectedCard;
 					break;
 				}
 			}
-
+			
+			System.out.println(temp);
+			
 			if((gamePanel.topCard.getColor().equals(temp.getColor())&&!temp.getColor().equals("all") || gamePanel.topCard.getValue().equals(temp.getValue())&&!temp.getValue().equals("-1") && !temp.getValue().equals("-2")) && client.isCurrent)            {
+				gamePanel.deckGroup.remove(temp);
 				gamePanel.myDeck.remove(temp);
 				gamePanel.updateDeck();
 				TopCard temp2 = new TopCard(temp.getColor(),temp.getType(),Integer.parseInt(temp.getValue()));
@@ -52,6 +61,7 @@ public class GameControl implements ActionListener{
 				}
 			}
 			else if((temp.getColor().equals("all")||temp.getType().equals("wild"))&& client.isCurrent) {
+				gamePanel.deckGroup.remove(temp);
 				String playerChoice=new String();
 				Object[] options = {"Blue", "Yellow", "Green", "Red"};
 				int n = 0;
@@ -80,7 +90,7 @@ public class GameControl implements ActionListener{
 			}
 			
 			else if((temp.getType().equals("skip")||temp.getType().equals("reverse")||temp.getType().equals("draw2")) && client.isCurrent && gamePanel.topCard.getType().equals(temp.getType())) {
-				
+				gamePanel.deckGroup.remove(temp);
 				TopCard temp2 = new TopCard(temp.getColor(),temp.getType(),Integer.parseInt(temp.getValue()));
 				try {
 					gamePanel.myDeck.remove(temp);
@@ -109,7 +119,15 @@ public class GameControl implements ActionListener{
 				gamePanel.board.add(error);
 				gamePanel.revalidate();
 				gamePanel.repaint();
-			}			
+			}	
+			if(gamePanel.myDeck.size()==0) {
+				try {
+					client.sendToServer("WON THE GAME");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 		}
 		if(command == "Draw Card") {
 			GamePanel gamePanel = (GamePanel)container.getComponent(4);
@@ -137,6 +155,21 @@ public class GameControl implements ActionListener{
 		if(command == "UNO") {
 
 		}
+
+		if(command == "Log Out") {
+			CardLayout cardLayout = (CardLayout)container.getLayout();
+			cardLayout.show(container, "1");
+			
+			GamePanel gamePanel = (GamePanel)container.getComponent(4);
+			gamePanel.myDeck.clear();
+			gamePanel.updateDeck();
+			gamePanel.revalidate();
+			gamePanel.repaint();
+		}
+
+		if(command == "Quit") {
+			System.exit(0);
+		}
 	}
 
 	public void setDeck(ArrayList<Card> myDeck) {
@@ -158,6 +191,15 @@ public class GameControl implements ActionListener{
 	public void setTopCard(TopCard topCard) {
 		GamePanel gamePanel = (GamePanel)container.getComponent(4);
 		gamePanel.setTopCard(topCard);
+		gamePanel.revalidate();
+		gamePanel.repaint();
+	}
+	
+	public void finalMessage(String message) {
+		GamePanel gamePanel = (GamePanel)container.getComponent(4);
+		gamePanel.board.removeAll();
+		gamePanel.addToUpdatesPanel(new JLabel(message));
+		gamePanel.deck.removeAll();
 		gamePanel.revalidate();
 		gamePanel.repaint();
 	}
