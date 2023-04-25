@@ -10,7 +10,8 @@ public class LoginPanel extends JPanel
   private JTextField usernameField;
   private JPasswordField passwordField;
   private JLabel errorLabel;
-  
+  private JButton cancelButton;
+  private JButton submitButton;
   // Getter for the text in the username field.
   public String getUsername()
   {
@@ -28,7 +29,12 @@ public class LoginPanel extends JPanel
   {
     errorLabel.setText(error);
   }
-  
+  public JButton getSubmitButton() {
+	  return submitButton;
+  }
+  public JButton getCancelButton() {
+	  return cancelButton;
+  }
   // Constructor for the login panel.
   public LoginPanel(LoginControl lc)
   {
@@ -59,9 +65,9 @@ public class LoginPanel extends JPanel
     // Create a panel for the buttons.
     JPanel buttonPanel = new JPanel();
    
-    JButton submitButton = new JButton("Submit");
+    submitButton = new JButton("Submit");
     submitButton.addActionListener(lc);
-    JButton cancelButton = new JButton("Cancel");
+    cancelButton = new JButton("Cancel");
     cancelButton.addActionListener(lc); 
     buttonPanel.add(submitButton);
     buttonPanel.add(cancelButton);
