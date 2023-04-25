@@ -175,11 +175,13 @@ public class PlayerClient extends AbstractClient {
 		this.gameControl = gameControl;
 	}
 
-	public boolean isCurrentPlayer() {
+	public boolean isCurrentPlayer()
+	{
 		return this.isCurrent;
 	}
 
-	public boolean setIsCurrentPlayer(boolean isCurrent) {
+	public boolean setIsCurrentPlayer(boolean isCurrent)
+	{
 		this.isCurrent=isCurrent;
 		return this.isCurrent;
 	}

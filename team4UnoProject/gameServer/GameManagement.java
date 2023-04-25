@@ -19,7 +19,7 @@ public class GameManagement {
 	private GameServer server;
 	private TopCard topCard;
 	private GameCards allCards;
-	//private Long currentPlayer;
+	private Long currentPlayer;
 	ArrayList<Long> players;
 	private JPanel container;
 	private JPanel nextPlayerContainer;
@@ -33,6 +33,7 @@ public class GameManagement {
 	private Queue<Long> playerTurnOrder;
 	private Random random;
 	private int randIdx;
+	private Thread[] arrayOfClients;
 	
 	private ConnectionToClient currentPlayerConnection;
 	private int count=0;
@@ -61,6 +62,7 @@ public class GameManagement {
 	    previousPlayerPanel = new GamePanel(previousPlayerGc);
 	    playerTurnOrder = new LinkedList<>();
 	    random = new Random();
+	    arrayOfClients = server.getClientConnections();
 	    	
 	}
 	
@@ -154,10 +156,19 @@ public class GameManagement {
 	public void reverse() 
 	{
 		
+		// Reverse the array
+		for (int i = 0; i < arrayOfClients.length / 2; i++) 
+		{
+		    Thread temp = arrayOfClients[i];
+		    arrayOfClients[i] = arrayOfClients[arrayOfClients.length - 1 - i];
+		    arrayOfClients[arrayOfClients.length - 1 - i] = temp;
+		}
+		
 	}
 	
-	public ConnectionToClient currentPlayer() {
-		Thread[] arrayOfClients = server.getClientConnections();
+	public ConnectionToClient currentPlayer()
+	{
+		
 		currentPlayerConnection  = (ConnectionToClient) arrayOfClients[currentPlayerNumber];
 		
 		try {
@@ -171,7 +182,8 @@ public class GameManagement {
 		return currentPlayerConnection;
 	}
 	
-	public void nextPlayer() {
+	public void nextPlayer()
+	{
 		count++;
 		currentPlayerNumber = count % players.size();
 	}
@@ -188,10 +200,12 @@ public class GameManagement {
 		Thread[] arrayOfClients = server.getClientConnections();
 		ConnectionToClient client = (ConnectionToClient) arrayOfClients[0];
 		
-		try {
+		try 
+		{
 			client.sendToClient(new JLabel("Your Turn"));
 			client.sendToClient(true);
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
