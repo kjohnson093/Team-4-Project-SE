@@ -26,8 +26,6 @@ public class PlayerClient extends AbstractClient {
 	private NewGameData newGameData;
 	private InitialMenuControl initialMenuControl;
 	private GameControl gameControl;
-	private int labelNo = 0;
-
 
 	public boolean isCurrent=false;
 	public PlayerClient() {
@@ -67,6 +65,15 @@ public class PlayerClient extends AbstractClient {
 			}
 			
 			if(message.equals("Your Turn")) {
+				gameControl.updateLabel2(new JLabel(message));
+			}
+			if(message.equals("You Have Been Skip")) {
+				gameControl.updateLabel(new JLabel(message));
+			}
+			if(message.equals("You Recieved 2 Cards")) {
+				gameControl.updateLabel(new JLabel(message));
+			}
+			if(message.equals("You Recieved 4 Cards")) {
 				gameControl.updateLabel2(new JLabel(message));
 			}
 			
