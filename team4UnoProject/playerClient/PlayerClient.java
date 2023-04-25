@@ -65,6 +65,14 @@ public class PlayerClient extends AbstractClient {
 			{
 				createAccountControl.displayError("Username already in use.");
 			}
+			
+			if(message.equals("Your Turn")) {
+				gameControl.updateLabel2(new JLabel(message));
+			}
+			
+			if(message.contains("Has Won The Game")) {
+				gameControl.finalMessage(message);
+			}
 		}
 
 		// If we received an Error, figure out where to display it.
@@ -175,13 +183,11 @@ public class PlayerClient extends AbstractClient {
 		this.gameControl = gameControl;
 	}
 
-	public boolean isCurrentPlayer()
-	{
+	public boolean isCurrentPlayer() {
 		return this.isCurrent;
 	}
 
-	public boolean setIsCurrentPlayer(boolean isCurrent)
-	{
+	public boolean setIsCurrentPlayer(boolean isCurrent) {
 		this.isCurrent=isCurrent;
 		return this.isCurrent;
 	}
