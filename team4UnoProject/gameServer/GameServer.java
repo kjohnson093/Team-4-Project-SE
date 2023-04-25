@@ -39,7 +39,7 @@ public class GameServer extends AbstractServer {
 			this.listen();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.append("Error starting server: " + e.getMessage());
 		}
 		// TODO Auto-generated constructor stub
 	}
@@ -135,6 +135,7 @@ public class GameServer extends AbstractServer {
 			}
 			catch (IOException e)
 			{
+				log.append("Failed to send to Client " + arg1.getId());
 				return;
 			}
 		}
@@ -153,7 +154,7 @@ public class GameServer extends AbstractServer {
 				}
 			} catch (Exception e1) {
 				log.append("Client " + arg1.getId() + " failed to create a new account\n");
-				e1.printStackTrace();
+				e1.printStackTrace(); 
 			}
 
 			// Send the result to the client.
@@ -163,6 +164,7 @@ public class GameServer extends AbstractServer {
 			}
 			catch (IOException e)
 			{
+				log.append("Failed to create account success message to Client " + arg1.getId());
 				return;
 			}
 
@@ -179,6 +181,7 @@ public class GameServer extends AbstractServer {
 					manageGame.getCurrentPlayer().sendToClient(manageGame.Draw2());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
+					log.append("Failed to process card from Client " + arg1.getId());
 					e.printStackTrace();
 				}
 				manageGame.nextPlayer();
@@ -191,6 +194,7 @@ public class GameServer extends AbstractServer {
 					manageGame.getCurrentPlayer().sendToClient(manageGame.Draw4());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
+					log.append("Failed to send card to Client " + arg1.getId());
 					e.printStackTrace();
 				}
 				manageGame.nextPlayer();
@@ -230,8 +234,8 @@ public class GameServer extends AbstractServer {
 					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+					log.append("Failed to draw card for Client " + arg1.getId());	
+					}
 			}
 
 			if(message.equals("LOGIN SUCCESS, UPDATE GAMEPANEL NOW**")) {
@@ -241,6 +245,7 @@ public class GameServer extends AbstractServer {
 					arg1.sendToClient(manageGame.deal7());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
+					log.append("Client " + arg1.getId() + " failed to login");
 					e.printStackTrace();
 				}
 			}
