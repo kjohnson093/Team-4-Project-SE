@@ -18,6 +18,10 @@ public class GamePanel extends JPanel
 	JButton useCard = new JButton("Use Card");
 	JButton addCard = new JButton("Draw Card");
 	JButton uno = new JButton("UNO!");
+	
+	JButton logout = new JButton("Log Out");
+	JButton quit = new JButton("Quit");
+	
 	String username = "";
 	TopCard topCard = new TopCard();
 
@@ -46,6 +50,8 @@ public class GamePanel extends JPanel
 		board.add(updatesPanel);
 		updatesPanel.add(updatesLabel);
 		panel.add(panel_4,BorderLayout.EAST);	
+		panel_1.add(logout);
+		panel_1.add(quit);
 		
 		JScrollPane scrollDeck = new JScrollPane(deck);
 		panel.add(scrollDeck,BorderLayout.SOUTH);
@@ -53,6 +59,8 @@ public class GamePanel extends JPanel
 		useCard.addActionListener(gc);	
 		addCard.addActionListener(gc);
 		uno.addActionListener(gc);
+		logout.addActionListener(gc);
+		quit.addActionListener(gc);
 	}
 
 	public void updateDeck() 
@@ -60,6 +68,7 @@ public class GamePanel extends JPanel
 		deck.removeAll();
 		deck.repaint();
 		deck.revalidate();
+		deckGroup.clearSelection();
 
 		for(int i = 0; i < myDeck.size(); i++) 
 		{
@@ -103,6 +112,7 @@ public class GamePanel extends JPanel
 	public void addCard() 
 	{
 		Card card = allcards.oneCard();
+		deckGroup.clearSelection();
 		deckGroup.add(card);
 
 		if(!card.getValue().equals("-1") && !card.getValue().equals("-2")) {
@@ -131,6 +141,7 @@ public class GamePanel extends JPanel
 				updateDeck();
 				i=myDeck.size();
 				deckGroup.remove(card);
+				deckGroup.clearSelection();
 				updateDeck();
 				break;
 			}
