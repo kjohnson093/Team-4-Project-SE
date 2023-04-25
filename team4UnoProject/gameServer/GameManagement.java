@@ -2,42 +2,23 @@ package gameServer;
 
 import java.util.ArrayList;
 import java.io.IOException;
-import java.util.*;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.lang.Math;
 
 import ocsf.server.ConnectionToClient;
-import playerClient.PlayerClient;
 import playerGUI.*;
 
 public class GameManagement {
-	private GamePanel panel;
-	private GameControl gc;
-	private GameControl nextPlayerGc;
-	private GameControl previousPlayerGc;
+
 	private GameServer server;
 	private TopCard topCard;
 	private GameCards allCards;
-	//private Long currentPlayer;
+
 	ArrayList<Long> players;
-	private JPanel container;
-	private JPanel nextPlayerContainer;
-	private JPanel previousPlayerContainer;
-	private PlayerClient nextPlayerClient;
-	private PlayerClient previousPlayerClient;
-	private PlayerClient client;
-	private GamePanel nextPlayerPanel;
-	private GamePanel previousPlayerPanel;
-	private int numCardsToDraw;
-	private Queue<Long> playerTurnOrder;
-	private Random random;
-	private int randIdx;
 
 	private ConnectionToClient currentPlayerConnection;
 	private int count=0;
 	private int currentPlayerNumber;
-	Thread[] arrayOfClient;
+	Boolean clockwise = true;
 
 
 	public GameManagement(GameServer server) 
@@ -45,43 +26,16 @@ public class GameManagement {
 		this.server=server;
 		allCards = new GameCards();
 		allCards.initializeCards();
-		container = new JPanel();
-		client = new PlayerClient();
-		nextPlayerContainer = new JPanel();
-		nextPlayerClient = new PlayerClient();
-		previousPlayerContainer = new JPanel();
-		previousPlayerClient = new PlayerClient();
-		gc = new GameControl(container, client);
-		nextPlayerGc = new GameControl(nextPlayerContainer, nextPlayerClient);
-		previousPlayerGc = new GameControl(previousPlayerContainer, previousPlayerClient);
-		panel = new GamePanel(gc);
 		Card temp = allCards.firstCard();
 		topCard = new TopCard(temp.getColor(),temp.getType(),Integer.parseInt(temp.getValue()));
 		players = new ArrayList<>();
-		nextPlayerPanel = new GamePanel(nextPlayerGc);
-		previousPlayerPanel = new GamePanel(previousPlayerGc);
-		playerTurnOrder = new LinkedList<>();
-		random = new Random();
-		arrayOfClient=server.getClientConnections();
-
 	}
 
 	public void playersConnected(Long id)
 	{
 		players.add(id);
-		playerTurnOrder.add(id);
-		System.out.println(players.size());
 		if(players.size() == 3) 
 		{
-			//			try 
-			//			{
-			//				//Thread.sleep(40000);
-			//				start();
-			//			} catch (InterruptedException e)
-			//			{
-			//				// TODO Auto-generated catch block
-			//				e.printStackTrace();
-			//			}
 			start();
 			server.stopListening();
 		}
@@ -90,11 +44,17 @@ public class GameManagement {
 	public void removePlayer(Long id)
 	{
 		players.remove(id);
-		playerTurnOrder.remove(id);
+
+		if(players.size() < 3) 
+		{
+			try {
+				server.listen();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
-
-
-
 
 	public int getTotalNoCards()
 	{
@@ -148,20 +108,9 @@ public class GameManagement {
 		return allCards.deal4();
 	}
 
-	public void skip()
-	{
-
-	}
-
 	public void reverse() 
 	{
-		// Reverse the array
-				for (int i = 0; i < arrayOfClient.length / 2; i++) 
-				{
-				    Thread temp = arrayOfClient[i];
-				    arrayOfClient[i] = arrayOfClient[arrayOfClient.length - 1 - i];
-				    arrayOfClient[arrayOfClient.length - 1 - i] = temp;
-				}
+		clockwise ^= true;
 	}
 
 	public ConnectionToClient currentPlayer() {
@@ -180,8 +129,15 @@ public class GameManagement {
 	}
 
 	public void nextPlayer() {
-		count++;
-		currentPlayerNumber = count % players.size();
+		if(clockwise) 
+		{
+			count++;
+			currentPlayerNumber = count % players.size();
+		}
+		else {
+			count--;
+			currentPlayerNumber = Math.abs(count) % players.size();
+		}
 	}
 
 	public ConnectionToClient getCurrentPlayer() {
