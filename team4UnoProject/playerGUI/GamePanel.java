@@ -121,12 +121,10 @@ public class GamePanel extends JPanel
 		}
 		else if(card.getValue().equals("-1")) {
 			card.setIcon(new ImageIcon("images/"+card.toStringSpecial()+".png"));
-			System.out.println(card.toStringSpecial());
 			myDeck.add(card);
 		}
 		else if(card.getValue().equals("-2")) {
 			card.setIcon(new ImageIcon("images/"+card.toStringVerySpecial()+".png"));
-			System.out.println(card.toStringVerySpecial());
 			myDeck.add(card);
 		}
 		updateDeck();
