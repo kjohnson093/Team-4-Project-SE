@@ -11,14 +11,14 @@ package gameServer;
 import ocsf.server.*;
 import java.awt.Color;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 
 import javax.swing.*;
 
 import playerGUI.LoginData;
 import playerGUI.CreateAccountData;
-import playerGUI.NewGameData;
-import playerGUI.JoinGameData;
+
 import playerGUI.TopCard;
 import database.UserDatabase;
 
@@ -29,6 +29,7 @@ public class GameServer extends AbstractServer {
 	private JTextArea log; 
 	private JLabel status; 
 	private boolean running = false;
+	private String username;
 	//private ArrayList<Game> activeGames;
 	private UserDatabase database = new UserDatabase();
 
@@ -115,6 +116,7 @@ public class GameServer extends AbstractServer {
 		{
 			// Check the username and password with the database.
 			LoginData data = (LoginData)arg0;
+			this.username = data.getUsername();
 			Object result = "LoginFailed";
 			try {
 				if (database.verifyAccount(data.getUsername(), data.getPassword()))
@@ -179,6 +181,7 @@ public class GameServer extends AbstractServer {
 			if(((TopCard)arg0).getType().equals("draw2")){
 				try {
 					manageGame.getCurrentPlayer().sendToClient(manageGame.Draw2());
+					manageGame.getCurrentPlayer().sendToClient("You Recieved 2 Cards");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					log.append("Failed to process card from Client " + arg1.getId());
@@ -192,6 +195,7 @@ public class GameServer extends AbstractServer {
 				
 				try {
 					manageGame.getCurrentPlayer().sendToClient(manageGame.Draw4());
+					manageGame.getCurrentPlayer().sendToClient("You Recieved 4 Cards");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					log.append("Failed to send card to Client " + arg1.getId());
@@ -203,12 +207,20 @@ public class GameServer extends AbstractServer {
 			}
 			
 			else if(((TopCard)arg0).getType().equals("skip")){
+				try {
+					manageGame.getCurrentPlayer().sendToClient("You Have Been Skip");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				manageGame.nextPlayer();
 				manageGame.currentPlayer();
 			}
 
 			else if(((TopCard)arg0).getType().equals("reverse")){
 				manageGame.reverse();
+				manageGame.nextPlayer();
+				manageGame.nextPlayer();
 				manageGame.currentPlayer();
 			}
 			else {
@@ -225,9 +237,7 @@ public class GameServer extends AbstractServer {
 		if(arg0 instanceof String) {
 			String message = (String)arg0;
 			if(message.equals("REQUEST A CARD")) {
-				try {
-					System.out.println("card requested");
-					
+				try {					
 					arg1.sendToClient(manageGame.addCard());
 					manageGame.nextPlayer();
 					manageGame.currentPlayer();
@@ -238,7 +248,13 @@ public class GameServer extends AbstractServer {
 					}
 			}
 			if(message.equals("WON THE GAME")) {
-				String send = "Client "+arg1.getId()+" Has Won The Game";
+				String send = this.username+" Has Won The Game";
+				try {
+					database.addScore(this.username);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				this.sendToAllClients(send);
 			}
 			
