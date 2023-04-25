@@ -19,7 +19,7 @@ public class GameManagement {
 	private GameServer server;
 	private TopCard topCard;
 	private GameCards allCards;
-	private Long currentPlayer;
+	//private Long currentPlayer;
 	ArrayList<Long> players;
 	private JPanel container;
 	private JPanel nextPlayerContainer;
@@ -33,13 +33,13 @@ public class GameManagement {
 	private Queue<Long> playerTurnOrder;
 	private Random random;
 	private int randIdx;
-	private Thread[] arrayOfClients;
-	
+
 	private ConnectionToClient currentPlayerConnection;
 	private int count=0;
 	private int currentPlayerNumber;
+	Thread[] arrayOfClient;
 
-	
+
 	public GameManagement(GameServer server) 
 	{
 		this.server=server;
@@ -59,13 +59,13 @@ public class GameManagement {
 		topCard = new TopCard(temp.getColor(),temp.getType(),Integer.parseInt(temp.getValue()));
 		players = new ArrayList<>();
 		nextPlayerPanel = new GamePanel(nextPlayerGc);
-	    previousPlayerPanel = new GamePanel(previousPlayerGc);
-	    playerTurnOrder = new LinkedList<>();
-	    random = new Random();
-	    arrayOfClients = server.getClientConnections();
-	    	
+		previousPlayerPanel = new GamePanel(previousPlayerGc);
+		playerTurnOrder = new LinkedList<>();
+		random = new Random();
+		arrayOfClient=server.getClientConnections();
+
 	}
-	
+
 	public void playersConnected(Long id)
 	{
 		players.add(id);
@@ -73,34 +73,34 @@ public class GameManagement {
 		System.out.println(players.size());
 		if(players.size() == 3) 
 		{
-//			try 
-//			{
-//				//Thread.sleep(40000);
-//				start();
-//			} catch (InterruptedException e)
-//			{
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+			//			try 
+			//			{
+			//				//Thread.sleep(40000);
+			//				start();
+			//			} catch (InterruptedException e)
+			//			{
+			//				// TODO Auto-generated catch block
+			//				e.printStackTrace();
+			//			}
 			start();
 			server.stopListening();
 		}
 	}
-	
+
 	public void removePlayer(Long id)
 	{
 		players.remove(id);
 		playerTurnOrder.remove(id);
 	}
-	
-	
-	
-	
+
+
+
+
 	public int getTotalNoCards()
 	{
 		return allCards.totalCardsLeft();
 	}
-	
+
 	public void setTopCard(TopCard top)
 	{
 		this.topCard = top;
@@ -109,17 +109,17 @@ public class GameManagement {
 	{
 		return topCard;
 	}
-	
+
 	public ArrayList<Card> deal7()
 	{
 		return allCards.deal7();
 	}
-	
+
 	public Card addCard()
 	{
 		return allCards.oneCard();
 	}
-	
+
 	public boolean isWinner()
 	{
 		if (getTotalNoCards() == 0)
@@ -128,7 +128,7 @@ public class GameManagement {
 		}
 		return false;
 	}
-	
+
 	public boolean hasUno()
 	{
 		if (getTotalNoCards() == 1)
@@ -137,75 +137,69 @@ public class GameManagement {
 		}
 		return false;
 	}
-	
+
 	public ArrayList<Card> Draw2()
 	{
 		return allCards.deal2();
 	}
-	
+
 	public ArrayList<Card> Draw4()
 	{
 		return allCards.deal4();
 	}
-	
+
 	public void skip()
 	{
-		
+
 	}
-	
+
 	public void reverse() 
 	{
-		
 		// Reverse the array
-		for (int i = 0; i < arrayOfClients.length / 2; i++) 
-		{
-		    Thread temp = arrayOfClients[i];
-		    arrayOfClients[i] = arrayOfClients[arrayOfClients.length - 1 - i];
-		    arrayOfClients[arrayOfClients.length - 1 - i] = temp;
-		}
-		
+				for (int i = 0; i < arrayOfClient.length / 2; i++) 
+				{
+				    Thread temp = arrayOfClient[i];
+				    arrayOfClient[i] = arrayOfClient[arrayOfClient.length - 1 - i];
+				    arrayOfClient[arrayOfClient.length - 1 - i] = temp;
+				}
 	}
-	
-	public ConnectionToClient currentPlayer()
-	{
-		
+
+	public ConnectionToClient currentPlayer() {
+		Thread[] arrayOfClients = server.getClientConnections();
 		currentPlayerConnection  = (ConnectionToClient) arrayOfClients[currentPlayerNumber];
-		
+
 		try {
 			currentPlayerConnection.sendToClient(true);
-			currentPlayerConnection.sendToClient(new JLabel("Your Turn"));
+			currentPlayerConnection.sendToClient("Your Turn");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return currentPlayerConnection;
 	}
-	
-	public void nextPlayer()
-	{
+
+	public void nextPlayer() {
 		count++;
 		currentPlayerNumber = count % players.size();
 	}
-	
+
 	public ConnectionToClient getCurrentPlayer() {
-		//Thread[] arrayOfClients = server.getClientConnections();
+		Thread[] arrayOfClients = server.getClientConnections();
 		currentPlayerConnection  = (ConnectionToClient) arrayOfClients[currentPlayerNumber];
-		
+
 		return currentPlayerConnection;
 	}
-	
+
 	public void start() 
 	{
 		Thread[] arrayOfClients = server.getClientConnections();
 		ConnectionToClient client = (ConnectionToClient) arrayOfClients[0];
-		
-		try 
-		{
-			client.sendToClient(new JLabel("Your Turn"));
+
+		try {
+			client.sendToClient("Your Turn");
 			client.sendToClient(true);
-		} catch (IOException e)
-		{
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
