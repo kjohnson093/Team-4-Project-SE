@@ -237,7 +237,11 @@ public class GameServer extends AbstractServer {
 					log.append("Failed to draw card for Client " + arg1.getId());	
 					}
 			}
-
+			if(message.equals("WON THE GAME")) {
+				String send = "Client "+arg1.getId()+" Has Won The Game";
+				this.sendToAllClients(send);
+			}
+			
 			if(message.equals("LOGIN SUCCESS, UPDATE GAMEPANEL NOW**")) {
 
 				try {
@@ -252,5 +256,3 @@ public class GameServer extends AbstractServer {
 		}
 	}
 }
-
-
