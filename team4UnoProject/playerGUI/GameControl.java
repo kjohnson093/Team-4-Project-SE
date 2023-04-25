@@ -1,6 +1,4 @@
 package playerGUI;
-//Controller of the game and contains the ActionListener 
-//that listens to button clicks
 
 import java.awt.Color;
 import java.awt.event.*;
@@ -18,73 +16,52 @@ public class GameControl implements ActionListener{
 	JLabel error = new JLabel("PLEASE PLAY A VALID CARD");
 	PlayerClient client;
 
-	// Constructor
-	public GameControl(JPanel container, PlayerClient client)
-	{
+	public GameControl(JPanel container, PlayerClient client) {
 		this.container=container;
 		this.client= client;
-	//System.out.println(this.client.getInetAddress());
 	}
 
-	// Override actionPerformed method
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 
-		// If "Use Card" button is clicked
-		if(command == "Use Card")
-		{
+		if(command == "Use Card"){
 
-			// Get the gamePanel
 			GamePanel gamePanel = (GamePanel)container.getComponent(4);
 			gamePanel.deckGroup.getElements();
 
-			// Get all the card buttons
 			Enumeration<AbstractButton> allButtons = gamePanel.deckGroup.getElements();
-
-			// Set a temporary Card
 			Card temp=new Card();
-
-			// Loop through all the card buttons
-			while(allButtons.hasMoreElements())
-			{
+			while(allButtons.hasMoreElements()) {
 				temp=(Card)allButtons.nextElement();
-				if(temp.isSelected()) 
-				{
+				if(temp.isSelected()) {
 					break;
 				}
 			}
 
-			// Check if the selected card can be played
 			if((gamePanel.topCard.getColor().equals(temp.getColor())&&!temp.getColor().equals("all") || gamePanel.topCard.getValue().equals(temp.getValue())&&!temp.getValue().equals("-1") && !temp.getValue().equals("-2")) && client.isCurrent)            {
-				// Remove the played card from the player's deck
 				gamePanel.myDeck.remove(temp);
 				gamePanel.updateDeck();
-
-				// Send the played card to the server
-				 TopCard temp2 = new TopCard(temp.getColor(),temp.getType(),Integer.parseInt(temp.getValue()));
-				try 
-				{
+				TopCard temp2 = new TopCard(temp.getColor(),temp.getType(),Integer.parseInt(temp.getValue()));
+				try {
 					client.sendToServer(temp2);
-					//client.isCurrentPlayer(false);
-				} catch (IOException e1)
-				{
+					client.setIsCurrentPlayer(false);
+
+				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 			}
-
-			// If the selected card is a Wild or a Draw 4 Wild card
 			else if((temp.getColor().equals("all")||temp.getType().equals("wild"))&& client.isCurrent) {
 				String playerChoice=new String();
 				Object[] options = {"Blue", "Yellow", "Green", "Red"};
 				int n = 0;
-				//If the user closes the option dialog without picking a color, it asks again till a valid color is picked for the wild card.
+				
 				do {
 				n = JOptionPane.showOptionDialog(null,"Please choose a color", "",JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE, null, options, options[0]);				
 				if(n >= 0) {
 					break;
 				}
-				//System.out.println("Please choose a card color");
+				System.out.println("Please choose a card color");
 				}while(true);
 				
 				playerChoice = (String) options[n];
@@ -94,31 +71,30 @@ public class GameControl implements ActionListener{
 					gamePanel.myDeck.remove(temp);
 					gamePanel.updateDeck();
 					client.sendToServer(temp2);
+					client.setIsCurrentPlayer(false);
+
 					//client.isCurrentPlayer(false);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 			}
-
-			// If the selected card is a Skip, Reverse, or Draw 2 card of the same type as the top card
-			else if((temp.getType().equals("skip")||temp.getType().equals("reverse")||temp.getType().equals("draw2")) && client.isCurrent && gamePanel.topCard.getType().equals(temp.getType()))
-			{
-				// Remove the played card from the player's deck and send the played card to the server
+			
+			else if((temp.getType().equals("skip")||temp.getType().equals("reverse")||temp.getType().equals("draw2")) && client.isCurrent && gamePanel.topCard.getType().equals(temp.getType())) {
+				
 				TopCard temp2 = new TopCard(temp.getColor(),temp.getType(),Integer.parseInt(temp.getValue()));
-				try 
-				{
+				try {
 					gamePanel.myDeck.remove(temp);
 					gamePanel.updateDeck();
 					client.sendToServer(temp2);
+					client.setIsCurrentPlayer(false);
+
 					//client.isCurrentPlayer(false);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 			}
-			//Executed when the user  who is not current player
-			//clicks on "Play Card" button.
-			else if(!client.isCurrent)
-			{
+			
+			else if(!client.isCurrent) {
 				System.out.println("Please wait your turn");
 				error.setText("Please wait your turn");
 				error.setForeground(Color.RED);
@@ -126,10 +102,8 @@ public class GameControl implements ActionListener{
 				gamePanel.revalidate();
 				gamePanel.repaint();
 			}
-			
-			//Executed when the user plays invalid card.
-			else
-			{
+
+			else {
 				error.setText("PLEASE PLAY A VALID CARD");
 				error.setForeground(Color.RED);
 				gamePanel.board.add(error);
@@ -137,10 +111,9 @@ public class GameControl implements ActionListener{
 				gamePanel.repaint();
 			}			
 		}
-		//Draws card  
 		if(command == "Draw Card") {
 			GamePanel gamePanel = (GamePanel)container.getComponent(4);
-			//Stops non-current player from drawing
+			
 			if(!client.isCurrent) {
 				error.setText("Cannot Draw Card, Please Wait Your Turn");
 				error.setForeground(Color.RED);
@@ -149,12 +122,13 @@ public class GameControl implements ActionListener{
 				gamePanel.repaint();			
 			}
 			
-			// Send a message to the server to request a card
-			else {//if(gamePanel.myDeck.size() <= 12){
+			else {
+				gamePanel.displayTopCard();
 				try {
 					client.sendToServer("REQUEST A CARD");
-					//client.isCurrentPlayer(false);
+					client.setIsCurrentPlayer(false);
 				} catch (IOException e1) {
+					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -165,17 +139,14 @@ public class GameControl implements ActionListener{
 		}
 	}
 
-	//Sets the player's deck of cards
-	public void setDeck(ArrayList<Card> myDeck)
-	{
-		// Get the game panel.
+	public void setDeck(ArrayList<Card> myDeck) {
 		GamePanel gamePanel = (GamePanel)container.getComponent(4);
 		gamePanel.myDeck.addAll(myDeck);
 		gamePanel.updateDeck();
 		gamePanel.revalidate();
 		gamePanel.repaint();
 	}
-	// Add the cards to the user's deck on the game panel and refresh the display.
+
 	public void addCardToDeck(Card oneCard) {
 		GamePanel gamePanel = (GamePanel)container.getComponent(4);
 		gamePanel.myDeck.add(oneCard);
@@ -184,12 +155,8 @@ public class GameControl implements ActionListener{
 		gamePanel.repaint();
 	}
 
-	//// Sets the top card of the discard pile on the game panel.
-	public void setTopCard(TopCard topCard) 
-	{
-		// Get the game panel.
+	public void setTopCard(TopCard topCard) {
 		GamePanel gamePanel = (GamePanel)container.getComponent(4);
-		// Set the top card on the game panel and repaint the panel.
 		gamePanel.setTopCard(topCard);
 		gamePanel.revalidate();
 		gamePanel.repaint();
@@ -198,6 +165,12 @@ public class GameControl implements ActionListener{
 	public void updateLabel(JLabel message) {
 		GamePanel gamePanel = (GamePanel)container.getComponent(4);
 		gamePanel.addToUpdatesPanel(message);
+		gamePanel.revalidate();
+		gamePanel.repaint();
+	}
+	public void updateLabel2(JLabel message) {
+		GamePanel gamePanel = (GamePanel)container.getComponent(4);
+		gamePanel.addToUpdatesPanel2(message);
 		gamePanel.revalidate();
 		gamePanel.repaint();
 	}
