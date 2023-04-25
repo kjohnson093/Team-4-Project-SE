@@ -1,7 +1,6 @@
 package playerGUI;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
 public class GameCards {
@@ -31,7 +30,15 @@ public class GameCards {
 		return dealt_cards;
 	}
 	
-	public ArrayList<Card> draw4() {
+	public ArrayList<Card> deal2() {
+		ArrayList<Card> dealt_cards = new ArrayList<Card>();
+		for(int i = 0; i < 2; i++) {
+			dealt_cards.add(oneCard());
+		}
+		return dealt_cards;
+	}
+	
+	public ArrayList<Card> deal4() {
 		ArrayList<Card> dealt_cards = new ArrayList<Card>();
 		for(int i = 0; i < 4; i++) {
 			dealt_cards.add(oneCard());
@@ -39,15 +46,6 @@ public class GameCards {
 		return dealt_cards;
 	}
 	
-	public ArrayList<Card> draw2()
-	{
-		ArrayList<Card> dealt_cards = new ArrayList<Card>();
-		for(int i = 0; i < 2; i++)
-		{
-			dealt_cards.add(oneCard());
-		}
-		return dealt_cards;
-	}
 	public Card oneCard() {
 		Random rand = new Random();
 		int i = rand.nextInt(cards.size());
@@ -63,8 +61,9 @@ public class GameCards {
 			
 			int j = rand.nextInt(cards.size());
 			Card returnCard = new Card();
-			returnCard = cards.get(j);		
-			if((!cards.get(j).getValue().equals("-1")) && (!cards.get(j).getValue().equals("-2"))) {
+			returnCard = cards.get(j);	
+			
+			if(!cards.get(j).getValue().equals("-1") && !cards.get(j).getValue().equals("-2") && !cards.get(i).getColor().equals("all")) {
 				System.out.println(cards.get(j));
 				cards.remove(j);
 				i=cards.size();
@@ -72,15 +71,11 @@ public class GameCards {
 				
 			}
 		}
+		
 		return cards.get(cards.size()-50);
 	}
 	public int totalCardsLeft() {
 		return cards.size();
-	}
-	
-	public void shuffleCards()
-	{
-		Collections.shuffle(cards);
 	}
 	
 	public void initializeCards() {
