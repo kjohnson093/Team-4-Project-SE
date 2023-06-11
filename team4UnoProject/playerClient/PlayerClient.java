@@ -8,7 +8,6 @@ import playerGUI.LoginControl;
 import playerGUI.CreateAccountControl;
 import playerGUI.InitialControl;
 import playerGUI.LoginData;
-import playerGUI.NewGameData;
 import playerGUI.InitialMenuControl;
 import playerGUI.GameControl;
 import playerGUI.Error;
@@ -23,7 +22,7 @@ public class PlayerClient extends AbstractClient {
 	private CreateAccountControl createAccountControl;
 	private InitialControl initialControl;
 	private LoginData loginData;
-	private NewGameData newGameData;
+	
 	private InitialMenuControl initialMenuControl;
 	private GameControl gameControl;
 
@@ -166,13 +165,6 @@ public class PlayerClient extends AbstractClient {
 		this.loginData = loginData;
 	}
 
-	public NewGameData getNewGameData() {
-		return newGameData;
-	}
-
-	public void setNewGameData(NewGameData newGameData) {
-		this.newGameData = newGameData;
-	}
 
 	public InitialMenuControl getInitialMenuControl() {
 		return initialMenuControl;
